@@ -37,7 +37,7 @@ class Btce(models.Exchange):
         """
         self.market = market
 
-    def book(self):
+    def depth(self):
         """@todo: Docstring for depth
         :returns: @todo
 
