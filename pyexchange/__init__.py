@@ -25,7 +25,7 @@ def exchanges():
      'bitcurex']
 
     """
-    return [name for name in exchange.models.Exchange._register]
+    return sorted([name for name in exchange.models.Exchange._register])
 
 
 def get_exchange(name, market=None):
