@@ -52,7 +52,7 @@ class Exchange(object):
         return self.__class__._markets_map.keys()
 
 
-Ticker = namedtuple('Ticker', ["avg",
+Ticker = namedtuple("Ticker", ["avg",
                                "high",
                                "low",
                                "last",
@@ -60,12 +60,10 @@ Ticker = namedtuple('Ticker', ["avg",
                                "sell",
                                "vol"])
 
-Trade = namedtuple('Market', ["date",
-                              "price",
-                              "amount",
-                              "tid",
-                              "market"])
+Trade = namedtuple("Trade", ["date",
+                             "price",
+                             "amount",
+                             "tid"])
 
-Order = namedtuple('Order', ['price',
-                             'amount',
-                             'market'])
+Order = namedtuple("Order", ["price",
+                             "amount"])
