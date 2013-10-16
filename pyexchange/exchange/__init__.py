@@ -7,5 +7,5 @@ __all__ = ['mtgox',
            'cryptotrade',
            'intersango',
            'localbitcoins',
-           'therock',
+           'rocktrading',
            'justcoin']
