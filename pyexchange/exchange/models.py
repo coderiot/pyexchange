@@ -32,6 +32,15 @@ class Exchange(object):
     """Exchange Interface"""
     __metaclass__ = ExchangeMeta
 
+    def __repr__(self):
+        """@todo: Docstring for __repr__
+
+        :arg1: @todo
+        :returns: @todo
+
+        """
+        return "%s('%s')" % (self.__class__.__name__, self.market)
+
     def _create_request_methods(self, endpoint, methods):
         """@todo: Docstring for __init__
         :returns: @todo
