@@ -5,8 +5,6 @@ from datetime import datetime
 
 import models
 
-import requests
-
 
 class Btce(models.Exchange):
     """Docstring for Bitstamp """
@@ -29,6 +27,13 @@ class Btce(models.Exchange):
 
     _endpoint = "https://btc-e.com/api/2/%(market)s/%(method)s"
 
+    _api_methods = {'depth': {'method': 'GET',
+                              'api': 'depth'},
+                    'ticker': {'method': 'GET',
+                               'api': 'ticker'},
+                    'trades': {'method': 'GET',
+                               'api': 'trades'}}
+
     def __init__(self, market="btc_usd"):
         """@todo: to be defined1
 
@@ -36,14 +41,16 @@ class Btce(models.Exchange):
 
         """
         self.market = market
+        super(Btce, self)._create_request_methods(
+                Btce._endpoint,
+                Btce._api_methods)
 
     def depth(self):
         """@todo: Docstring for depth
         :returns: @todo
 
         """
-        url = Btce._endpoint % {'market': self.market, 'method': 'depth'}
-        resp = requests.get(url).json()
+        resp = self._request_depth().json()
 
         asks = []
         for p, a in resp['asks']:
@@ -61,16 +68,15 @@ class Btce(models.Exchange):
         :returns: @todo
 
         """
-        url = Btce._endpoint % {'market': self.market, 'method': 'ticker'}
-        j = requests.get(url).json()
-        r = j['ticker']
-        return models.Ticker(avg=r['avg'],
-                      high=r['high'],
-                      low=r['low'],
-                      last=r['last'],
-                      buy=r['buy'],
-                      sell=r['sell'],
-                      vol=r['vol']
+        resp = self._request_ticker().json()
+
+        return models.Ticker(avg=resp['ticker']['avg'],
+                      high=resp['ticker']['high'],
+                      low=resp['ticker']['low'],
+                      last=resp['ticker']['last'],
+                      buy=resp['ticker']['buy'],
+                      sell=resp['ticker']['sell'],
+                      vol=resp['ticker']['vol']
                       )
 
     def trades(self):
@@ -78,8 +84,7 @@ class Btce(models.Exchange):
         :returns: @todo
 
         """
-        url = Btce._endpoint % {'market': self.market, 'method': 'trades'}
-        resp = requests.get(url).json()
+        resp = self._request_trades().json()
         trades = []
         for t in resp:
             date = datetime.fromtimestamp(int(t['date']))

@@ -5,14 +5,19 @@ from datetime import datetime
 
 import models
 
-import requests
-
 
 class Bitstamp(models.Exchange):
     """Docstring for Bitstamp """
-
     _markets_map = {'btc_usd': 'btc_usd'}
+
     _endpoint = "https://www.bitstamp.net/api/%(method)s/"
+
+    _api_methods = {'depth': {'method': 'GET',
+                              'api': 'order_book'},
+                    'ticker': {'method': 'GET',
+                               'api': 'ticker'},
+                    'trades': {'method': 'GET',
+                               'api': 'transactions'}}
 
     def __init__(self, market="btc_usd"):
         """@todo: to be defined1
@@ -21,14 +26,16 @@ class Bitstamp(models.Exchange):
 
         """
         self.market = market
+        super(Bitstamp, self)._create_request_methods(
+                Bitstamp._endpoint,
+                Bitstamp._api_methods)
 
     def depth(self):
         """@todo: Docstring for depth
         :returns: @todo
 
         """
-        url = Bitstamp._endpoint % {'method': 'order_book'}
-        resp = requests.get(url).json()
+        resp = self._request_depth().json()
 
         asks = []
         for p, a in resp['asks']:
@@ -46,8 +53,7 @@ class Bitstamp(models.Exchange):
         :returns: @todo
 
         """
-        url = Bitstamp._endpoint % {'method': 'ticker'}
-        resp = requests.get(url).json()
+        resp = self._request_ticker().json()
         return models.Ticker(avg=None,# high + low / 2.
                              high=float(resp['high']),
                              low=float(resp['low']),
@@ -61,8 +67,7 @@ class Bitstamp(models.Exchange):
         :returns: @todo
 
         """
-        url = Bitstamp._endpoint % {'method': 'transactions'}
-        resp = requests.get(url).json()
+        resp = self._request_trades().json()
         trades = []
         for t in resp:
             date = datetime.fromtimestamp(int(t['date']))

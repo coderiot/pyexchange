@@ -29,6 +29,14 @@ class LocalBitcoins(models.Exchange):
 
     _endpoint = "https://localbitcoins.com/bitcoincharts/%(market)s/%(method)s"
 
+    _api_methods = {'depth': {'method': 'GET',
+                              'api': 'orderbook.json'},
+                    #'ticker': {'method': 'GET',
+                               #'api': 'ticker'},
+                    'trades': {'method': 'GET',
+                               'api': 'trades.json'}
+                    }
+
     def __init__(self, market="btc_usd"):
         """@todo: to be defined1
 
@@ -36,16 +44,16 @@ class LocalBitcoins(models.Exchange):
 
         """
         self.market = market
+        super(LocalBitcoins, self)._create_request_methods(
+                LocalBitcoins._endpoint,
+                LocalBitcoins._api_methods)
 
     def depth(self):
         """@todo: Docstring for depth
         :returns: @todo
 
         """
-        m = self._markets_map[self.market]
-        url = LocalBitcoins._endpoint % {'market': m,
-                                         'method': 'orderbook.json'}
-        resp = requests.get(url).json()
+        resp = self._request_depth().json()
 
         asks = []
         for p, a in resp['asks']:
@@ -79,9 +87,7 @@ class LocalBitcoins(models.Exchange):
         :returns: @todo
 
         """
-        m = self._markets_map[self.market]
-        url = LocalBitcoins._endpoint % {'market': m, 'method': 'trades.json'}
-        resp = requests.get(url).json()
+        resp = self._request_trades().json()
         trades = []
         for t in resp:
             date = datetime.fromtimestamp(t['date'])

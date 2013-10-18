@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
-import models
+from datetime import datetime
 
-import requests
+import models
 
 
 class RockTrading(models.Exchange):
@@ -16,7 +16,15 @@ class RockTrading(models.Exchange):
                     'ltc_btc': 'LTCBTC',
                     'ltc_eur': 'LTCEUR'}
 
-    _endpoint = "http://www.therocktrading.com/api/%(method)s/%(market)s"
+    _endpoint = "https://www.therocktrading.com/api/%(method)s/%(market)s"
+
+    _api_methods = {'depth': {'method': 'GET',
+                              'api': 'orderbook'},
+                    'ticker': {'method': 'GET',
+                               'api': 'ticker'},
+                    'trades': {'method': 'GET',
+                               'api': 'trades'}
+                    }
 
     def __init__(self, market="btc_usd"):
         """@todo: to be defined1
@@ -25,15 +33,16 @@ class RockTrading(models.Exchange):
 
         """
         self.market = market
+        super(RockTrading, self)._create_request_methods(
+                RockTrading._endpoint,
+                RockTrading._api_methods)
 
     def depth(self):
         """@todo: Docstring for depth
         :returns: @todo
 
         """
-        m = self._markets_map[self.market]
-        url = RockTrading._endpoint % {'market': m, 'method': 'orderbook'}
-        resp = requests.get(url, verify=False).json()
+        resp = self._request_depth(verify=False).json()
 
         asks = []
         for p, a in resp['asks']:
@@ -51,9 +60,8 @@ class RockTrading(models.Exchange):
         :returns: @todo
 
         """
-        m = self._markets_map[self.market]
-        url = RockTrading._endpoint % {'market': m, 'method': 'ticker'}
-        resp = requests.get(url, verify=False).json()['result'][0]
+        resp = self._request_ticker(verify=False).json()
+        resp = resp['result'][0]
 
         return models.Ticker(avg=None,
                              buy=float(resp['bid']),
@@ -68,6 +76,16 @@ class RockTrading(models.Exchange):
         :returns: @todo
 
         """
-        m = self._markets_map[self.market]
-        url = RockTrading._endpoint % {'market': m, 'method': 'trades'}
-        return requests.get(url, verify=False).json()
+        resp = self._request_trades(verify=False).json()
+        trades = []
+        for t in resp:
+            date = datetime.fromtimestamp(t['date'])
+            amount = t['amount']
+            price = t['price']
+            tid = t['tid']
+            trades.append(models.Trade(date=date,
+                                       amount=amount,
+                                       price=price,
+                                       tid=tid))
+
+        return trades

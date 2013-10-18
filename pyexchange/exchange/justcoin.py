@@ -15,6 +15,14 @@ class Justcoin(models.Exchange):
 
     _endpoint = "https://justcoin.com/api/v1/markets/%(market)s%(method)s"
 
+    _api_methods = {'depth': {'method': 'GET',
+                              'api': '/depth'},
+                    #'ticker': {'method': 'GET',
+                               #'api': 'ticker'},
+                    #'trades': {'method': 'GET',
+                               #'api': '/trades'}
+                    }
+
     def __init__(self, market="btc_eur"):
         """@todo: to be defined1
 
@@ -22,15 +30,16 @@ class Justcoin(models.Exchange):
 
         """
         self.market = market
+        super(Justcoin, self)._create_request_methods(
+                Justcoin._endpoint,
+                Justcoin._api_methods)
 
     def depth(self):
         """@todo: Docstring for depth
         :returns: @todo
 
         """
-        m = self._markets_map[self.market]
-        url = Justcoin._endpoint % {'market': m, 'method': '/depth'}
-        resp = requests.get(url).json()
+        resp = self._request_depth().json()
 
         asks = []
         for p, a in resp['asks']:

@@ -5,14 +5,19 @@ from datetime import datetime
 
 import models
 
-import requests
-
 
 class Bitcurex(models.Exchange):
     """Docstring for Bitstamp """
 
     _markets_map = {'btc_pln': 'pln',
                    'btc_eur': 'eur'}
+
+    _api_methods = {'depth': {'method': 'GET',
+                              'api': 'orderbook.json'},
+                    'ticker': {'method': 'GET',
+                               'api': 'ticker.json'},
+                    'trades': {'method': 'GET',
+                               'api': 'trades.json'}}
 
     _endpoint = "https://%(market)s.bitcurex.com/data/%(method)s"
 
@@ -23,16 +28,16 @@ class Bitcurex(models.Exchange):
 
         """
         self.market = market
+        super(Bitcurex, self)._create_request_methods(
+                Bitcurex._endpoint,
+                Bitcurex._api_methods)
 
     def depth(self):
         """@todo: Docstring for depth
         :returns: @todoo
 
         """
-        m = self._markets_map[self.market]
-        url = Bitcurex._endpoint % {'market': m, 'method': 'orderbook.json'}
-
-        resp = requests.get(url).json()
+        resp = self._request_depth().json()
         asks = []
         for p, a in resp['asks']:
             asks.append(models.Order(price=p,
@@ -49,9 +54,7 @@ class Bitcurex(models.Exchange):
         :returns: @todo
 
         """
-        m = self._markets_map[self.market]
-        url = Bitcurex._endpoint % {'market': m, 'method': 'ticker.json'}
-        resp = requests.get(url).json()
+        resp = self._request_ticker()
         return models.Ticker(avg=resp['avg'],
                              buy=resp['buy'],
                              high=resp['high'],
@@ -65,9 +68,7 @@ class Bitcurex(models.Exchange):
         :returns: @todo
 
         """
-        m = self._markets_map[self.market]
-        url = Bitcurex._endpoint % {'market': m, 'method': 'trades.json'}
-        resp = requests.get(url).json()
+        resp = self._request_trades()
         trades = []
         for t in resp:
             date = datetime.fromtimestamp(t['date'])

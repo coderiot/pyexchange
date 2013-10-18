@@ -5,8 +5,6 @@ from datetime import datetime
 
 import models
 
-import requests
-
 
 class Intersango(models.Exchange):
     """Docstring for Bitstamp """
@@ -18,6 +16,14 @@ class Intersango(models.Exchange):
 
     _endpoint = "https://intersango.com/api/%(method)s.php?currency_pair_id=%(market)d"
 
+    _api_methods = {'depth': {'method': 'GET',
+                              'api': 'depth'},
+                    'ticker': {'method': 'GET',
+                               'api': 'ticker'},
+                    'trades': {'method': 'GET',
+                               'api': 'trades'}
+                    }
+
     def __init__(self, market="btc_eur"):
         """@todo: to be defined1
 
@@ -25,15 +31,16 @@ class Intersango(models.Exchange):
 
         """
         self.market = market
+        super(Intersango, self)._create_request_methods(
+                Intersango._endpoint,
+                Intersango._api_methods)
 
     def depth(self):
         """@todo: Docstring for depth
         :returns: @todo
 
         """
-        m = self._markets_map[self.market]
-        url = Intersango._endpoint % {'market': m, 'method': 'depth'}
-        resp = requests.get(url).json()
+        resp = self._request_depth().json()
 
         asks = []
         for p, a in resp['asks']:
@@ -51,9 +58,7 @@ class Intersango(models.Exchange):
         :returns: @todo
 
         """
-        m = self._markets_map[self.market]
-        url = Intersango._endpoint % {'market': m, 'method': 'ticker'}
-        resp = requests.get(url).json()
+        resp = self._request_ticker().json()
         return models.Ticker(avg=None,
                              buy=float(resp['buy']),
                              high=None,
@@ -67,9 +72,7 @@ class Intersango(models.Exchange):
         :returns: @todo
 
         """
-        m = self._markets_map[self.market]
-        url = Intersango._endpoint % {'market': m, 'method': 'trades'}
-        resp = requests.get(url).json()
+        resp = self._request_trades().json()
         trades = []
         for t in resp:
             date = datetime.fromtimestamp(t['date'])

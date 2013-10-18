@@ -3,10 +3,7 @@
 
 import models
 
-import requests
 
-
-# einheitliche markets for all exchanges
 class Cryptotrade(models.Exchange):
     """Docstring for Cryptotrade"""
 
@@ -31,6 +28,14 @@ class Cryptotrade(models.Exchange):
 
     _endpoint = "https://crypto-trade.com/api/1/%(method)s/%(market)s"
 
+    _api_methods = {'depth': {'method': 'GET',
+                              'api': 'depth'},
+                    'ticker': {'method': 'GET',
+                               'api': 'ticker'},
+                    #'trades': {'method': 'GET',
+                               #'api': 'trades'}
+                    }
+
     def __init__(self, market="btc_usd"):
         """@todo: to be defined1
 
@@ -38,15 +43,16 @@ class Cryptotrade(models.Exchange):
 
         """
         self.market = market
+        super(Cryptotrade, self)._create_request_methods(
+                Cryptotrade._endpoint,
+                Cryptotrade._api_methods)
 
     def depth(self):
         """@todo: Docstring for depth
         :returns: @todo
 
         """
-        url = Cryptotrade._endpoint % {'market': self.market,
-                                       'method': 'depth'}
-        resp = requests.get(url).json()
+        resp = self._request_depth().json()
 
         asks = []
         for p, a in resp['asks']:
@@ -64,17 +70,14 @@ class Cryptotrade(models.Exchange):
         :returns: @todo
 
         """
-        url = Cryptotrade._endpoint % {'market': self.market,
-                                       'method': 'ticker'}
-        j = requests.get(url).json()
-        resp = j['data']
+        resp = self._request_ticker().json()
         return models.Ticker(avg=None,# high + low / 2.
-                             high=float(resp['high']),
-                             low=float(resp['low']),
-                             last=float(resp['last']),
-                             buy=float(resp['max_bid']),
-                             sell=float(resp['min_ask']),
-                             vol=float(resp['vol_btc']))
+                             high=float(resp['data']['high']),
+                             low=float(resp['data']['low']),
+                             last=float(resp['data']['last']),
+                             buy=float(resp['data']['max_bid']),
+                             sell=float(resp['data']['min_ask']),
+                             vol=float(resp['data']['vol_btc']))
 
     def trades(self):
         """@todo: Docstring for trades

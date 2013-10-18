@@ -5,7 +5,6 @@ from datetime import datetime
 
 import models
 
-import requests
 
 class Bitfinex(models.Exchange):
     """Docstring for Bitstamp """
@@ -13,6 +12,13 @@ class Bitfinex(models.Exchange):
     _markets_map = {'btc_usd': 'btcusd',
                    'ltc_usd': 'ltcusd',
                    'ltc_btc': 'ltcbtc'}
+
+    _api_methods = {'depth': {'method': 'GET',
+                              'api': 'book'},
+                    'ticker': {'method': 'GET',
+                               'api': 'ticker'},
+                    'trades': {'method': 'GET',
+                               'api': 'trades'}}
 
     _endpoint = "https://api.bitfinex.com/v1/%(method)s/%(market)s"
 
@@ -23,15 +29,16 @@ class Bitfinex(models.Exchange):
 
         """
         self.market = market
+        super(Bitfinex, self)._create_request_methods(
+                Bitfinex._endpoint,
+                Bitfinex._api_methods)
 
     def depth(self):
         """@todo: Docstring for depth
         :returns: @todo
 
         """
-        m = self._markets_map[self.market]
-        url = Bitfinex._endpoint % {'market': m, 'method': 'book'}
-        resp = requests.get(url).json()
+        resp = self._request_depth().json()
 
         asks = []
         for o in resp['asks']:
@@ -49,9 +56,8 @@ class Bitfinex(models.Exchange):
         :returns: @todo
 
         """
-        m = self._markets_map[self.market]
-        url = Bitfinex._endpoint % {'market': m, 'method': 'ticker'}
-        resp = requests.get(url).json()
+        resp = self._request_ticker().json()
+
         return models.Ticker(avg=float(resp['mid']),
                              buy=float(resp['bid']),
                              high=None,
@@ -65,9 +71,7 @@ class Bitfinex(models.Exchange):
         :returns: @todo
 
         """
-        m = self._markets_map[self.market]
-        url = Bitfinex._endpoint % {'market': m, 'method': 'trades'}
-        resp = requests.get(url).json()
+        resp = self._request_trades().json()
         trades = []
         for t in resp:
             date = datetime.fromtimestamp(t['timestamp'])

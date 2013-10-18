@@ -5,8 +5,6 @@ from datetime import datetime
 
 import models
 
-import requests
-
 
 class MtGox(models.Exchange):
     """Docstring for MtGox """
@@ -30,6 +28,14 @@ class MtGox(models.Exchange):
 
     _endpoint = "http://data.mtgox.com/api/2/%(market)s/money/%(method)s"
 
+    _api_methods = {'depth': {'method': 'GET',
+                              'api': '/depth/fetch'},
+                    'ticker': {'method': 'GET',
+                               'api': '/ticker'},
+                    'trades': {'method': 'GET',
+                               'api': '/trades/fetch'}
+                    }
+
     def __init__(self, market="btc_usd"):
         """@todo: to be defined1
 
@@ -37,16 +43,17 @@ class MtGox(models.Exchange):
 
         """
         self.market = market
+        super(MtGox, self)._create_request_methods(
+                MtGox._endpoint,
+                MtGox._api_methods)
 
     def depth(self):
         """@todo: Docstring for depth
         :returns: @todo
 
         """
-        m = self._markets_map[self.market]
-        url = MtGox._endpoint % {'market': m, 'method': "/depth/fetch"}
-
-        resp = requests.get(url).json()['data']
+        resp = self._request_depth().json()
+        resp = resp['data']
         asks = []
         for o in resp['asks']:
             asks.append(models.Order(price=o['price'],
@@ -63,9 +70,8 @@ class MtGox(models.Exchange):
         :returns: @todo
 
         """
-        m = self._markets_map[self.market]
-        url = MtGox._endpoint % {'market': m, 'method': "/ticker"}
-        resp = requests.get(url).json()['data']
+        resp = self._request_ticker().json()
+        resp = resp['data']
         return models.Ticker(avg=float(resp['avg']['value']),
                              buy=float(resp['buy']['value']),
                              high=float(resp['high']['value']),
@@ -74,15 +80,13 @@ class MtGox(models.Exchange):
                              sell=float(resp['sell']['value']),
                              vol=float(resp['vol']['value']))
 
-
     def trades(self):
         """@todo: Docstring for trades
         :returns: @todo
 
         """
-        m = self._markets_map[self.market]
-        url = MtGox._endpoint % {'market': m, 'method': "/trades/fetch"}
-        resp = requests.get(url).json()['data']
+        resp = self._request_trades().json()
+        resp = resp['data']
         trades = []
         for t in resp:
             date = datetime.fromtimestamp(t['date'])

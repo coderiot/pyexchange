@@ -3,8 +3,6 @@
 
 import models
 
-import requests
-
 
 class Campbx(models.Exchange):
     """Docstring for Bitstamp """
@@ -13,6 +11,14 @@ class Campbx(models.Exchange):
 
     _endpoint = "https://campbx.com/api/%(method)s"
 
+    _api_methods = {'depth': {'method': 'GET',
+                              'api': 'xdepth.php'},
+                    'ticker': {'method': 'GET',
+                               'api': 'xticker.php'},
+                    #'trades': {'method': 'GET',
+                               #'api': 'trades'}
+                    }
+
     def __init__(self, market="btc_usd"):
         """@todo: to be defined1
 
@@ -20,14 +26,16 @@ class Campbx(models.Exchange):
 
         """
         self.market = market
+        super(Campbx, self)._create_request_methods(
+                Campbx._endpoint,
+                Campbx._api_methods)
 
     def depth(self):
         """@todo: Docstring for depth
         :returns: @todo
 
         """
-        url = Campbx._endpoint % {'method': 'xdepth.php'}
-        resp = requests.get(url).json()
+        resp = self._request_depth().json()
 
         asks = []
         for p, a in resp['Asks']:
@@ -45,8 +53,7 @@ class Campbx(models.Exchange):
         :returns: @todo
 
         """
-        url = Campbx._endpoint % {'method': 'xticker.php'}
-        resp = requests.get(url).json()
+        resp = self._request_ticker().json()
         return models.Ticker(avg=None,# high + low / 2.
                              high=None,
                              low=None,
