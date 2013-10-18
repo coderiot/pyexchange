@@ -5,6 +5,9 @@ from collections import namedtuple
 
 import sys
 
+import requests
+
+
 class ExchangeMeta(type):
     """Metaclass for creating exchange objects.
     Add the subclass to an internal list to list exchanges.
@@ -28,7 +31,20 @@ class ExchangeMeta(type):
 class Exchange(object):
     """Exchange Interface"""
     __metaclass__ = ExchangeMeta
-    _markets_map = {}
+
+    def _create_request_methods(self, endpoint, methods):
+        """@todo: Docstring for __init__
+        :returns: @todo
+
+        """
+        for m, d in methods.items():
+            def _fn_handler(method=d['method'], api=d['api'], **args):
+                market = self._markets_map[self.market]
+                url = endpoint % {'market': market,
+                                  'method': api}
+                return requests.request(method, url, **args)
+
+            setattr(self, '_request_%s' % m, _fn_handler)
 
     @property
     def market(self):
