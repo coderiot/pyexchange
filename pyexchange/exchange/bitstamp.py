@@ -25,7 +25,7 @@ class Bitstamp(models.Exchange):
 
         """
         url = "/".join([base_url, 'order_book'])
-        resp = self.request('GET', url).json()
+        resp = self._request('GET', url).json()
 
         asks = []
         for p, a in resp['asks']:
@@ -44,7 +44,7 @@ class Bitstamp(models.Exchange):
 
         """
         url = "/".join([base_url, 'ticker'])
-        resp = self.request('GET', url).json()
+        resp = self._request('GET', url).json()
 
         return models.Ticker(avg=None,# high + low / 2.
                              high=float(resp['high']),
@@ -60,7 +60,7 @@ class Bitstamp(models.Exchange):
 
         """
         url = "/".join([base_url, 'transactions'])
-        resp = self.request('GET', url).json()
+        resp = self._request('GET', url).json()
 
         trades = []
         for t in resp:
