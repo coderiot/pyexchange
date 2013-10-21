@@ -41,20 +41,6 @@ class Exchange(object):
         """
         return "%s('%s')" % (self.__class__.__name__, self.market)
 
-    def _create_request_methods(self, endpoint, methods):
-        """@todo: Docstring for __init__
-        :returns: @todo
-
-        """
-        for m, d in methods.items():
-            def _fn_handler(method=d['method'], api=d['api'], **args):
-                market = self._markets_map[self.market]
-                url = endpoint % {'market': market,
-                                  'method': api}
-                return requests.request(method, url, **args)
-
-            setattr(self, '_request_%s' % m, _fn_handler)
-
     @property
     def market(self):
         return self._market
@@ -63,6 +49,7 @@ class Exchange(object):
     def market(self, market):
         if market in self.__class__._markets_map:
             self._market = market
+            self._symbol = self.__class__._markets_map[market]
         else:
             raise Exception('Market not available for this Exchange.')
 
@@ -75,6 +62,17 @@ class Exchange(object):
 
         """
         return self.__class__._markets_map.keys()
+
+    def _request(self, *args, **kwargs):
+        """@todo: Docstring for request
+
+        :*args: @todo
+        :**kwargs: @todo
+        :returns: @todo
+
+        """
+
+        return requests.request(*args, **kwargs)
 
 
 Ticker = namedtuple("Ticker", ["avg",
