@@ -47,9 +47,10 @@ class Exchange(object):
 
     @market.setter
     def market(self, market):
-        if market in self.__class__._markets_map:
+        cls = type(self)
+        if market in cls._markets_map:
             self._market = market
-            self._symbol = self.__class__._markets_map[market]
+            self._symbol = cls._markets_map[market]
         else:
             raise Exception('Market not available for this Exchange.')
 
