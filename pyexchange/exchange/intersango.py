@@ -5,6 +5,8 @@ from datetime import datetime
 
 import models
 
+base_url = "https://intersango.com/api"
+
 
 class Intersango(models.Exchange):
     """Docstring for Bitstamp """
@@ -14,16 +16,6 @@ class Intersango(models.Exchange):
                     'btc_usd': 3,
                     'btc_pln': 4}
 
-    _endpoint = "https://intersango.com/api/%(method)s.php?currency_pair_id=%(market)d"
-
-    _api_methods = {'depth': {'method': 'GET',
-                              'api': 'depth'},
-                    'ticker': {'method': 'GET',
-                               'api': 'ticker'},
-                    'trades': {'method': 'GET',
-                               'api': 'trades'}
-                    }
-
     def __init__(self, market="btc_eur"):
         """@todo: to be defined1
 
@@ -31,16 +23,16 @@ class Intersango(models.Exchange):
 
         """
         self.market = market
-        super(Intersango, self)._create_request_methods(
-                Intersango._endpoint,
-                Intersango._api_methods)
 
     def depth(self):
         """@todo: Docstring for depth
         :returns: @todo
 
         """
-        resp = self._request_depth().json()
+        url = "%s/%s.php?currency_pair_id=%s" % (base_url,
+                                                 'depth',
+                                                 self._symbol)
+        resp = self._request('GET', url).json()
 
         asks = []
         for p, a in resp['asks']:
@@ -58,7 +50,10 @@ class Intersango(models.Exchange):
         :returns: @todo
 
         """
-        resp = self._request_ticker().json()
+        url = "%s/%s.php?currency_pair_id=%s" % (base_url,
+                                                 'ticker',
+                                                 self._symbol)
+        resp = self._request('GET', url).json()
         return models.Ticker(avg=None,
                              buy=float(resp['buy']),
                              high=None,
@@ -72,7 +67,11 @@ class Intersango(models.Exchange):
         :returns: @todo
 
         """
-        resp = self._request_trades().json()
+        url = "%s/%s.php?currency_pair_id=%s" % (base_url,
+                                                 'trades',
+                                                 self._symbol)
+        resp = self._request('GET', url).json()
+
         trades = []
         for t in resp:
             date = datetime.fromtimestamp(t['date'])

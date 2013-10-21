@@ -3,6 +3,8 @@
 
 import models
 
+base_url = "https://crypto-trade.com/api/1"
+
 
 class Cryptotrade(models.Exchange):
     """Docstring for Cryptotrade"""
@@ -26,16 +28,6 @@ class Cryptotrade(models.Exchange):
                     'wdc_btc': 'wdc_btc',
                     'dgc_btc': 'dgc_btc'}
 
-    _endpoint = "https://crypto-trade.com/api/1/%(method)s/%(market)s"
-
-    _api_methods = {'depth': {'method': 'GET',
-                              'api': 'depth'},
-                    'ticker': {'method': 'GET',
-                               'api': 'ticker'},
-                    #'trades': {'method': 'GET',
-                               #'api': 'trades'}
-                    }
-
     def __init__(self, market="btc_usd"):
         """@todo: to be defined1
 
@@ -43,16 +35,14 @@ class Cryptotrade(models.Exchange):
 
         """
         self.market = market
-        super(Cryptotrade, self)._create_request_methods(
-                Cryptotrade._endpoint,
-                Cryptotrade._api_methods)
 
     def depth(self):
         """@todo: Docstring for depth
         :returns: @todo
 
         """
-        resp = self._request_depth().json()
+        url = "%s/%s/%s" % (base_url, 'depth', self._symbol)
+        resp = self._request('GET', url).json()
 
         asks = []
         for p, a in resp['asks']:
@@ -70,7 +60,9 @@ class Cryptotrade(models.Exchange):
         :returns: @todo
 
         """
-        resp = self._request_ticker().json()
+        url = "%s/%s/%s" % (base_url, 'ticker', self._symbol)
+        resp = self._request('GET', url).json()
+
         return models.Ticker(avg=None,# high + low / 2.
                              high=float(resp['data']['high']),
                              low=float(resp['data']['low']),

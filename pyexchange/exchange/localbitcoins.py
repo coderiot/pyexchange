@@ -5,7 +5,7 @@ from datetime import datetime
 
 import models
 
-import requests
+data_url = "https://localbitcoins.com"
 
 class LocalBitcoins(models.Exchange):
     """Docstring for Bitstamp """
@@ -27,15 +27,6 @@ class LocalBitcoins(models.Exchange):
                     'btc_usd': 'USD',
                     'btc_zar': 'ZAR'}
 
-    _endpoint = "https://localbitcoins.com/bitcoincharts/%(market)s/%(method)s"
-
-    _api_methods = {'depth': {'method': 'GET',
-                              'api': 'orderbook.json'},
-                    #'ticker': {'method': 'GET',
-                               #'api': 'ticker'},
-                    'trades': {'method': 'GET',
-                               'api': 'trades.json'}
-                    }
 
     def __init__(self, market="btc_usd"):
         """@todo: to be defined1
@@ -44,16 +35,18 @@ class LocalBitcoins(models.Exchange):
 
         """
         self.market = market
-        super(LocalBitcoins, self)._create_request_methods(
-                LocalBitcoins._endpoint,
-                LocalBitcoins._api_methods)
 
     def depth(self):
         """@todo: Docstring for depth
         :returns: @todo
 
         """
-        resp = self._request_depth().json()
+        url = "%s/%s/%s/%s" % (data_url,
+                               'bitcoincharts',
+                               self._symbol,
+                               'orderbook.json')
+
+        resp = self._request('GET', url).json()
 
         asks = []
         for p, a in resp['asks']:
@@ -71,9 +64,12 @@ class LocalBitcoins(models.Exchange):
         :returns: @todo
 
         """
-        m = self._markets_map[self.market]
-        url = "https://localbitcoins.com/bitcoinaverage/ticker-all-currencies/"
-        resp = requests.get(url).json()[m]
+        url = "%s/%s" % (data_url,
+                        'bitcoinaverage/ticker-all-currencies')
+
+        resp = self._request('GET', url).json()
+        resp = resp[self._symbol]
+
         return models.Ticker(avg=resp['avg_24h'],
                              buy=None,
                              high=None,
@@ -87,7 +83,13 @@ class LocalBitcoins(models.Exchange):
         :returns: @todo
 
         """
-        resp = self._request_trades().json()
+        url = "%s/%s/%s/%s" % (data_url,
+                               'bitcoincharts',
+                               self._symbol,
+                               'trades.json')
+
+        resp = self._request('GET', url).json()
+
         trades = []
         for t in resp:
             date = datetime.fromtimestamp(t['date'])

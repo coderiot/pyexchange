@@ -5,21 +5,14 @@ from datetime import datetime
 
 import models
 
+data_url = "https://%(market)s.bitcurex.com/data/%(method)s"
+
 
 class Bitcurex(models.Exchange):
     """Docstring for Bitstamp """
 
     _markets_map = {'btc_pln': 'pln',
-                   'btc_eur': 'eur'}
-
-    _api_methods = {'depth': {'method': 'GET',
-                              'api': 'orderbook.json'},
-                    'ticker': {'method': 'GET',
-                               'api': 'ticker.json'},
-                    'trades': {'method': 'GET',
-                               'api': 'trades.json'}}
-
-    _endpoint = "https://%(market)s.bitcurex.com/data/%(method)s"
+                    'btc_eur': 'eur'}
 
     def __init__(self, market="btc_eur"):
         """@todo: to be defined1
@@ -28,16 +21,16 @@ class Bitcurex(models.Exchange):
 
         """
         self.market = market
-        super(Bitcurex, self)._create_request_methods(
-                Bitcurex._endpoint,
-                Bitcurex._api_methods)
 
     def depth(self):
         """@todo: Docstring for depth
         :returns: @todoo
 
         """
-        resp = self._request_depth().json()
+        url = data_url % {'market': self._symbol,
+                          'method': 'orderbook.json'}
+        resp = self._request('GET', url).json()
+
         asks = []
         for p, a in resp['asks']:
             asks.append(models.Order(price=p,
@@ -54,7 +47,10 @@ class Bitcurex(models.Exchange):
         :returns: @todo
 
         """
-        resp = self._request_ticker()
+        url = data_url % {'market': self._symbol,
+                          'method': 'ticker.json'}
+        resp = self._request('GET', url).json()
+
         return models.Ticker(avg=resp['avg'],
                              buy=resp['buy'],
                              high=resp['high'],
@@ -68,7 +64,10 @@ class Bitcurex(models.Exchange):
         :returns: @todo
 
         """
-        resp = self._request_trades()
+        url = data_url % {'market': self._symbol,
+                          'method': 'trades.json'}
+        resp = self._request('GET', url).json()
+
         trades = []
         for t in resp:
             date = datetime.fromtimestamp(t['date'])

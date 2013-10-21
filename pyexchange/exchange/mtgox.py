@@ -5,6 +5,8 @@ from datetime import datetime
 
 import models
 
+base_url = "http://data.mtgox.com/api/2"
+
 
 class MtGox(models.Exchange):
     """Docstring for MtGox """
@@ -26,16 +28,6 @@ class MtGox(models.Exchange):
                     'btc_nok': 'BTCNOK',
                     'btc_czk': 'BTCCZK'}
 
-    _endpoint = "http://data.mtgox.com/api/2/%(market)s/money/%(method)s"
-
-    _api_methods = {'depth': {'method': 'GET',
-                              'api': '/depth/fetch'},
-                    'ticker': {'method': 'GET',
-                               'api': '/ticker'},
-                    'trades': {'method': 'GET',
-                               'api': '/trades/fetch'}
-                    }
-
     def __init__(self, market="btc_usd"):
         """@todo: to be defined1
 
@@ -43,16 +35,17 @@ class MtGox(models.Exchange):
 
         """
         self.market = market
-        super(MtGox, self)._create_request_methods(
-                MtGox._endpoint,
-                MtGox._api_methods)
 
     def depth(self):
         """@todo: Docstring for depth
         :returns: @todo
 
         """
-        resp = self._request_depth().json()
+        url = "%s/%s/%s" % (base_url,
+                            self._symbol,
+                            'money/depth/fetch')
+
+        resp = self._request('GET', url).json()
         resp = resp['data']
         asks = []
         for o in resp['asks']:
@@ -70,7 +63,11 @@ class MtGox(models.Exchange):
         :returns: @todo
 
         """
-        resp = self._request_ticker().json()
+        url = "%s/%s/%s" % (base_url,
+                            self._symbol,
+                            'money/ticker')
+
+        resp = self._request('GET', url).json()
         resp = resp['data']
         return models.Ticker(avg=float(resp['avg']['value']),
                              buy=float(resp['buy']['value']),
@@ -85,7 +82,11 @@ class MtGox(models.Exchange):
         :returns: @todo
 
         """
-        resp = self._request_trades().json()
+        url = "%s/%s/%s" % (base_url,
+                            self._symbol,
+                            'money/trades/fetch')
+
+        resp = self._request('GET', url).json()
         resp = resp['data']
         trades = []
         for t in resp:

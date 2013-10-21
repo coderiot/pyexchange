@@ -5,6 +5,7 @@ from datetime import datetime
 
 import models
 
+base_url = "https://btc-e.com/api/2"
 
 class Btce(models.Exchange):
     """Docstring for Bitstamp """
@@ -25,15 +26,6 @@ class Btce(models.Exchange):
                     'ppc_btc': 'ppc_btc',
                     'ftc_btc': 'ftc_btc'}
 
-    _endpoint = "https://btc-e.com/api/2/%(market)s/%(method)s"
-
-    _api_methods = {'depth': {'method': 'GET',
-                              'api': 'depth'},
-                    'ticker': {'method': 'GET',
-                               'api': 'ticker'},
-                    'trades': {'method': 'GET',
-                               'api': 'trades'}}
-
     def __init__(self, market="btc_usd"):
         """@todo: to be defined1
 
@@ -41,16 +33,15 @@ class Btce(models.Exchange):
 
         """
         self.market = market
-        super(Btce, self)._create_request_methods(
-                Btce._endpoint,
-                Btce._api_methods)
 
     def depth(self):
         """@todo: Docstring for depth
         :returns: @todo
 
         """
-        resp = self._request_depth().json()
+        url = "/".join([base_url, self._symbol, 'depth'])
+        resp = self._request('GET', url).json()
+
 
         asks = []
         for p, a in resp['asks']:
@@ -68,7 +59,8 @@ class Btce(models.Exchange):
         :returns: @todo
 
         """
-        resp = self._request_ticker().json()
+        url = "/".join([base_url, self._symbol, 'ticker'])
+        resp = self._request('GET', url).json()
 
         return models.Ticker(avg=resp['ticker']['avg'],
                       high=resp['ticker']['high'],
@@ -84,7 +76,9 @@ class Btce(models.Exchange):
         :returns: @todo
 
         """
-        resp = self._request_trades().json()
+        url = "/".join([base_url, self._symbol, 'trades'])
+        resp = self._request('GET', url).json()
+
         trades = []
         for t in resp:
             date = datetime.fromtimestamp(int(t['date']))

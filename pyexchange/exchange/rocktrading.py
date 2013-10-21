@@ -6,6 +6,9 @@ from datetime import datetime
 import models
 
 
+base_url = "https://www.therocktrading.com/api"
+
+
 class RockTrading(models.Exchange):
     """Docstring for Bitstamp """
 
@@ -16,16 +19,6 @@ class RockTrading(models.Exchange):
                     'ltc_btc': 'LTCBTC',
                     'ltc_eur': 'LTCEUR'}
 
-    _endpoint = "https://www.therocktrading.com/api/%(method)s/%(market)s"
-
-    _api_methods = {'depth': {'method': 'GET',
-                              'api': 'orderbook'},
-                    'ticker': {'method': 'GET',
-                               'api': 'ticker'},
-                    'trades': {'method': 'GET',
-                               'api': 'trades'}
-                    }
-
     def __init__(self, market="btc_usd"):
         """@todo: to be defined1
 
@@ -33,16 +26,14 @@ class RockTrading(models.Exchange):
 
         """
         self.market = market
-        super(RockTrading, self)._create_request_methods(
-                RockTrading._endpoint,
-                RockTrading._api_methods)
 
     def depth(self):
         """@todo: Docstring for depth
         :returns: @todo
 
         """
-        resp = self._request_depth(verify=False).json()
+        url = "%s/%s/%s" % (base_url, 'orderbook', self._symbol)
+        resp = self._request('GET', url, verify=False).json()
 
         asks = []
         for p, a in resp['asks']:
@@ -60,7 +51,8 @@ class RockTrading(models.Exchange):
         :returns: @todo
 
         """
-        resp = self._request_ticker(verify=False).json()
+        url = "%s/%s/%s" % (base_url, 'ticker', self._symbol)
+        resp = self._request('GET', url, verify=False).json()
         resp = resp['result'][0]
 
         return models.Ticker(avg=None,
@@ -76,7 +68,9 @@ class RockTrading(models.Exchange):
         :returns: @todo
 
         """
-        resp = self._request_trades(verify=False).json()
+        url = "%s/%s/%s" % (base_url, 'trades', self._symbol)
+        resp = self._request('GET', url, verify=False).json()
+
         trades = []
         for t in resp:
             date = datetime.fromtimestamp(t['date'])
