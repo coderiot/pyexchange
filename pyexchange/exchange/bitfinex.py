@@ -30,7 +30,7 @@ class Bitfinex(models.Exchange):
         """
         url = "/".join([base_url, 'book', self._symbol])
 
-        resp = self.request('GET', url).json()
+        resp = self._request('GET', url).json()
 
         asks = []
         for o in resp['asks']:
