@@ -1,5 +1,6 @@
 __all__ = ['mtgox',
            'btce',
+           'btcchina',
            'bitcurex',
            'bitfinex',
            'bitstamp',
