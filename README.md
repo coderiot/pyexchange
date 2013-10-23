@@ -102,7 +102,7 @@ Result:
 
 Result:
 ```python
-Ticker(avg=157.19387, high=163.0, low=151.13324, last=160.0, buy=160.00001, sell=160.16, vol=22805.90812588)
+Ticker(avg=Decimal('157.19387'), high=Decimal('163.0'), low=Decimal('151.13324'), last=Decimal('160.0'), buy=Decimal('160.00001'), sell=Decimal('160.16'), vol=Decimal('22805.9081')
 ```
 
 ### get exchange orderbook
@@ -115,11 +115,11 @@ Ticker(avg=157.19387, high=163.0, low=151.13324, last=160.0, buy=160.00001, sell
 
 Result:
 ```python
-[Order(price=160.22457, amount=0.01),
- Order(price=160.22458, amount=0.12521962),
- Order(price=160.29347, amount=1),
- Order(price=160.36999, amount=2.56417803),
- Order(price=160.37, amount=7.98),],
+[Order(price=Decimal('160.22457'), amount=Decimal('0.01')),
+ Order(price=Decimal('160.22458'), amount=Decimal('0.12521962')),
+ Order(price=Decimal('160.29347'), amount=Decimal('1')),
+ Order(price=Decimal('160.36999'), amount=Decimal('2.56417803')),
+ Order(price=Decimal('160.37'), amount=Decimal('7.98')),],
  ...
 ]
 ```
@@ -134,11 +134,11 @@ Result:
 
 Result:
 ```python
-[Order(price=160.22457, amount=0.01),
- Order(price=160.22458, amount=0.12521962),
- Order(price=160.29347, amount=1),
- Order(price=160.36999, amount=2.56417803),
- Order(price=160.37, amount=7.98),
+[Order(price=Decimal('160.22457'), amount=Decimal('0.01')),
+ Order(price=Decimal('160.22458'), amount=Decimal('0.12521962')),
+ Order(price=Decimal('160.29347'), amount=Decimal('1')),
+ Order(price=Decimal('160.36999'), amount=Decimal('2.56417803')),
+ Order(price=Decimal('160.37'), amount=Decimal('7.98')),
  ...
 ]
 ```
