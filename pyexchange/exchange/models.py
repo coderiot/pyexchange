@@ -3,6 +3,8 @@
 
 from collections import namedtuple
 
+import decimal
+
 import sys
 
 import requests
@@ -31,6 +33,7 @@ class ExchangeMeta(type):
 class Exchange(object):
     """Exchange Interface"""
     __metaclass__ = ExchangeMeta
+    decimal.setcontext(decimal.ExtendedContext)
 
     def __repr__(self):
         """@todo: Docstring for __repr__
@@ -40,6 +43,15 @@ class Exchange(object):
 
         """
         return "%s('%s')" % (self.__class__.__name__, self.market)
+
+    def _create_decimal(self, dec_str):
+        """@todo: Docstring for _create_decimal
+
+        :str: @todo
+        :returns: @todo
+
+        """
+        return decimal.getcontext().create_decimal(dec_str or 'NaN')
 
     @property
     def market(self):
