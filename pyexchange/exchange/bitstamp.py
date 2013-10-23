@@ -3,9 +3,12 @@
 
 from datetime import datetime
 
+import decimal
+
 import models
 
 base_url = "https://www.bitstamp.net/api/"
+
 
 class Bitstamp(models.Exchange):
     """Docstring for Bitstamp """
@@ -18,6 +21,16 @@ class Bitstamp(models.Exchange):
 
         """
         self.market = market
+        decimal.setcontext(decimal.ExtendedContext)
+
+    def _create_decimal(self, dec_str):
+        """@todo: Docstring for _create_decimal
+
+        :str: @todo
+        :returns: @todo
+
+        """
+        return decimal.getcontext().create_decimal(dec_str)
 
     def depth(self):
         """@todo: Docstring for depth
@@ -29,12 +42,12 @@ class Bitstamp(models.Exchange):
 
         asks = []
         for p, a in resp['asks']:
-            asks.append(models.Order(price=p,
-                                     amount=a))
+            asks.append(models.Order(price=self._create_decimal(p),
+                                     amount=self._create_decimal(a)))
         bids = []
         for p, a in resp['bids']:
-            bids.append(models.Order(price=p,
-                                     amount=a))
+            bids.append(models.Order(price=self._create_decimal(p),
+                                     amount=self._create_decimal(a)))
 
         return asks, bids
 
@@ -47,12 +60,12 @@ class Bitstamp(models.Exchange):
         resp = self._request('GET', url).json()
 
         return models.Ticker(avg=None,# high + low / 2.
-                             high=float(resp['high']),
-                             low=float(resp['low']),
-                             last=float(resp['last']),
-                             buy=float(resp['bid']),
-                             sell=float(resp['ask']),
-                             vol=float(resp['volume']))
+                             high=self._create_decimal(resp['high']),
+                             low=self._create_decimal(resp['low']),
+                             last=self._create_decimal(resp['last']),
+                             buy=self._create_decimal(resp['bid']),
+                             sell=self._create_decimal(resp['ask']),
+                             vol=self._create_decimal(resp['volume']))
 
     def trades(self):
         """@todo: Docstring for trades
@@ -69,8 +82,8 @@ class Bitstamp(models.Exchange):
             price = t['price']
             tid = t['tid']
             trades.append(models.Trade(date=date,
-                                       amount=amount,
-                                       price=price,
+                                       price=self._create_decimal(price),
+                                       amount=self._create_decimal(amount),
                                        tid=tid))
 
         return trades
