@@ -12,14 +12,16 @@ $ pip install -e git+https://github.com/coderiot/pyexchange.git#egg=pyexchange
  - [Bitcurex](https://bitcurex.com/)
  - [Bitfinex](https://www.bitfinex.com/)
  - [Bitstamp](https://www.bitstamp.net/)
+ - [BTCChina](https://btcchina.com/)
  - [BTC-e](https://btc-e.com/)
  - [CampBX](https://campbx.com/)
  - [Crypto-Trade](https://crypto-trade.com/)
+ - [Cryptsy](https://crypto-trade.com/)
  - [Intersango](https://intersango.com/)
  - [Justcoin](https://justcoin.com/)
  - [localbitcions](https://localbitcoins.com/)
  - [mtgox](https://www.mtgox.com/)
- - [The Rock](https://www.therocktrading.com/)
+ - [The Rock Trading](https://www.therocktrading.com/)
 
 ## Usage
 ### list supported exchanges
@@ -34,9 +36,11 @@ example Result:
 ['bitcurex',
  'bitfinex',
  'bitstamp',
+ 'btcchina',
  'btce',
  'campbx',
  'cryptotrade',
+ 'cryptsy',
  'intersango',
  'justcoin',
  'localbitcoins',
