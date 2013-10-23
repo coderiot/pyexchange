@@ -4,7 +4,7 @@
 from distutils.core import setup
 
 setup(name='pyexchange',
-    version='0.1.0',
+    version='0.1.1',
     license='GPL',
     description='Consistent API wrapper for cryptocurrency exchanges.',
     author='peterr',
