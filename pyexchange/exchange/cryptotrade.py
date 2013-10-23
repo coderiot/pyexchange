@@ -46,12 +46,12 @@ class Cryptotrade(models.Exchange):
 
         asks = []
         for p, a in resp['asks']:
-            asks.append(models.Order(price=p,
-                                     amount=a))
+            asks.append(models.Order(price=self._create_decimal(p),
+                                     amount=self._create_decimal(a)))
         bids = []
         for p, a in resp['bids']:
-            bids.append(models.Order(price=p,
-                                     amount=a))
+            bids.append(models.Order(price=self._create_decimal(p),
+                                     amount=self._create_decimal(a)))
 
         return asks, bids
 
@@ -64,12 +64,12 @@ class Cryptotrade(models.Exchange):
         resp = self._request('GET', url).json()
 
         return models.Ticker(avg=None,# high + low / 2.
-                             high=float(resp['data']['high']),
-                             low=float(resp['data']['low']),
-                             last=float(resp['data']['last']),
-                             buy=float(resp['data']['max_bid']),
-                             sell=float(resp['data']['min_ask']),
-                             vol=float(resp['data']['vol_btc']))
+                             high=self._create_decimal(resp['data']['high']),
+                             low=self._create_decimal(resp['data']['low']),
+                             last=self._create_decimal(resp['data']['last']),
+                             buy=self._create_decimal(resp['data']['max_bid']),
+                             sell=self._create_decimal(resp['data']['min_ask']),
+                             vol=self._create_decimal(resp['data']['vol_btc']))
 
     def trades(self):
         """@todo: Docstring for trades

@@ -116,12 +116,12 @@ class Cryptsy(models.Exchange):
 
         asks = []
         for order in resp['sellorders']:
-            asks.append(models.Order(price=order['price'],
-                                     amount=order['quantity']))
+            asks.append(models.Order(price=self._create_decimal(order['price']),
+                                     amount=self._create_decimal(order['quantity'])))
         bids = []
         for order in resp['buyorders']:
-            bids.append(models.Order(price=order['price'],
-                                     amount=order['quantity']))
+            bids.append(models.Order(price=self._create_decimal(order['price']),
+                                     amount=self._create_decimal(order['quantity'])))
 
         return asks, bids
 
@@ -140,10 +140,10 @@ class Cryptsy(models.Exchange):
         return models.Ticker(avg=None,
                              buy=None,
                              high=None,
-                             last=resp['lasttradeprice'],
+                             last=self._create_decimal(resp['lasttradeprice']),
                              low=None,
                              sell=None,
-                             vol=resp['volume'])
+                             vol=self._create_decimal(resp['volume']))
 
     def trades(self):
         """@todo: Docstring for trades
@@ -160,8 +160,8 @@ class Cryptsy(models.Exchange):
         trades = []
         for t in resp['recenttrades']:
             date = datetime.strptime(t['time'], "%Y-%m-%d %H:%M:%S")
-            amount = t['quantity']
-            price = t['price']
+            amount = self._create_decimal(t['quantity'])
+            price = self._create_decimal(t['price'])
             tid = t['id']
             trades.append(models.Trade(date=date,
                                        amount=amount,

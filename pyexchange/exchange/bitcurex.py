@@ -33,12 +33,12 @@ class Bitcurex(models.Exchange):
 
         asks = []
         for p, a in resp['asks']:
-            asks.append(models.Order(price=p,
-                                     amount=a))
+            asks.append(models.Order(price=self._create_decimal(p),
+                                     amount=self._create_decimal(a)))
         bids = []
         for p, a in resp['bids']:
-            bids.append(models.Order(price=p,
-                                     amount=a))
+            bids.append(models.Order(price=self._create_decimal(p),
+                                     amount=self._create_decimal(a)))
 
         return asks, bids
 
@@ -51,13 +51,13 @@ class Bitcurex(models.Exchange):
                           'method': 'ticker.json'}
         resp = self._request('GET', url).json()
 
-        return models.Ticker(avg=resp['avg'],
-                             buy=resp['buy'],
-                             high=resp['high'],
-                             last=resp['last'],
-                             low=resp['low'],
-                             sell=resp['sell'],
-                             vol=resp['vol'])
+        return models.Ticker(avg=self._create_decimal(resp['avg']),
+                             buy=self._create_decimal(resp['buy']),
+                             high=self._create_decimal(resp['high']),
+                             last=self._create_decimal(resp['last']),
+                             low=self._create_decimal(resp['low']),
+                             sell=self._create_decimal(resp['sell']),
+                             vol=self._create_decimal(resp['vol']))
 
     def trades(self):
         """@todo: Docstring for trades
@@ -71,8 +71,8 @@ class Bitcurex(models.Exchange):
         trades = []
         for t in resp:
             date = datetime.fromtimestamp(t['date'])
-            amount = t['amount']
-            price = t['price']
+            amount = self._create_decimal(t['amount'])
+            price = self._create_decimal(t['price'])
             tid = t['tid']
             trades.append(models.Trade(date=date,
                                        amount=amount,

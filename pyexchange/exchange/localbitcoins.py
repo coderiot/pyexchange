@@ -50,13 +50,12 @@ class LocalBitcoins(models.Exchange):
 
         asks = []
         for p, a in resp['asks']:
-            asks.append(models.Order(price=p,
-                                     amount=a))
+            asks.append(models.Order(price=self._create_decimal(p),
+                                     amount=self._create_decimal(a)))
         bids = []
         for p, a in resp['bids']:
-            bids.append(models.Order(price=p,
-                                     amount=a))
-
+            bids.append(models.Order(price=self._create_decimal(p),
+                                     amount=self._create_decimal(a)))
         return asks, bids
 
     def ticker(self):
@@ -70,13 +69,13 @@ class LocalBitcoins(models.Exchange):
         resp = self._request('GET', url).json()
         resp = resp[self._symbol]
 
-        return models.Ticker(avg=resp['avg_24h'],
+        return models.Ticker(avg=self._create_decimal(resp['avg_24h']),
                              buy=None,
                              high=None,
-                             last=float(resp['rates']['last']),
+                             last=self._create_decimal(resp['rates']['last']),
                              low=None,
                              sell=None,
-                             vol=float(resp['volume_btc']))
+                             vol=self._create_decimal(resp['volume_btc']))
 
     def trades(self):
         """@todo: Docstring for trades
@@ -93,9 +92,9 @@ class LocalBitcoins(models.Exchange):
         trades = []
         for t in resp:
             date = datetime.fromtimestamp(t['date'])
-            amount = t['amount']
-            price = t['price']
-            tid = t['tid']
+            amount = self._create_decimal(t['amount'])
+            price = self._create_decimal(t['price'])
+            tid = self._create_decimal(t['tid'])
             trades.append(models.Trade(date=date,
                                        amount=amount,
                                        price=price,

@@ -3,8 +3,6 @@
 
 from datetime import datetime
 
-import decimal
-
 import models
 
 base_url = "https://www.bitstamp.net/api/"
@@ -21,16 +19,6 @@ class Bitstamp(models.Exchange):
 
         """
         self.market = market
-        decimal.setcontext(decimal.ExtendedContext)
-
-    def _create_decimal(self, dec_str):
-        """@todo: Docstring for _create_decimal
-
-        :str: @todo
-        :returns: @todo
-
-        """
-        return decimal.getcontext().create_decimal(dec_str)
 
     def depth(self):
         """@todo: Docstring for depth
@@ -78,12 +66,12 @@ class Bitstamp(models.Exchange):
         trades = []
         for t in resp:
             date = datetime.fromtimestamp(int(t['date']))
-            amount = t['amount']
-            price = t['price']
+            amount = self._create_decimal(t['amount'])
+            price = self._create_decimal(t['price'])
             tid = t['tid']
             trades.append(models.Trade(date=date,
-                                       price=self._create_decimal(price),
-                                       amount=self._create_decimal(amount),
+                                       price=price,
+                                       amount=amount,
                                        tid=tid))
 
         return trades

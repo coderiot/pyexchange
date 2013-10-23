@@ -33,12 +33,12 @@ class Justcoin(models.Exchange):
 
         asks = []
         for p, a in resp['asks']:
-            asks.append(models.Order(price=p,
-                                     amount=a))
+            asks.append(models.Order(price=self._create_decimal(p),
+                                     amount=self._create_decimal(a)))
         bids = []
         for p, a in resp['bids']:
-            bids.append(models.Order(price=p,
-                                     amount=a))
+            bids.append(models.Order(price=self._create_decimal(p),
+                                     amount=self._create_decimal(a)))
 
         return asks, bids
 
@@ -55,12 +55,12 @@ class Justcoin(models.Exchange):
                 resp = market
 
         return models.Ticker(avg=None,
-                             buy=float(resp['ask']),
-                             high=float(resp['high']),
-                             last=float(resp['last']),
-                             low=float(resp['low']),
-                             sell=float(resp['bid']),
-                             vol=float(resp['volume']))
+                             buy=self._create_decimal(resp['ask']),
+                             high=self._create_decimal(resp['high']),
+                             last=self._create_decimal(resp['last']),
+                             low=self._create_decimal(resp['low']),
+                             sell=self._create_decimal(resp['bid']),
+                             vol=self._create_decimal(resp['volume']))
 
     def trades(self):
         """@todo: Docstring for trades

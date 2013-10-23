@@ -37,12 +37,12 @@ class RockTrading(models.Exchange):
 
         asks = []
         for p, a in resp['asks']:
-            asks.append(models.Order(price=p,
-                                     amount=a))
+            asks.append(models.Order(price=self._create_decimal(p),
+                                     amount=self._create_decimal(a)))
         bids = []
         for p, a in resp['bids']:
-            bids.append(models.Order(price=p,
-                                     amount=a))
+            bids.append(models.Order(price=self._create_decimal(p),
+                                     amount=self._create_decimal(a)))
 
         return asks, bids
 
@@ -56,11 +56,11 @@ class RockTrading(models.Exchange):
         resp = resp['result'][0]
 
         return models.Ticker(avg=None,
-                             buy=float(resp['bid']),
+                             buy=self._create_decimal(resp['bid']),
                              high=None,
                              last=None,
                              low=None,
-                             sell=float(resp['ask']),
+                             sell=self._create_decimal(resp['ask']),
                              vol=None)
 
     def trades(self):
@@ -74,8 +74,8 @@ class RockTrading(models.Exchange):
         trades = []
         for t in resp:
             date = datetime.fromtimestamp(t['date'])
-            amount = t['amount']
-            price = t['price']
+            amount = self._create_decimal(t['amount'])
+            price = self._create_decimal(t['price'])
             tid = t['tid']
             trades.append(models.Trade(date=date,
                                        amount=amount,

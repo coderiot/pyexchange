@@ -42,15 +42,14 @@ class Btce(models.Exchange):
         url = "/".join([base_url, self._symbol, 'depth'])
         resp = self._request('GET', url).json()
 
-
         asks = []
         for p, a in resp['asks']:
-            asks.append(models.Order(price=p,
-                                     amount=a))
+            asks.append(models.Order(price=self._create_decimal(p),
+                                     amount=self._create_decimal(a)))
         bids = []
         for p, a in resp['bids']:
-            bids.append(models.Order(price=p,
-                                     amount=a))
+            bids.append(models.Order(price=self._create_decimal(p),
+                                     amount=self._create_decimal(a)))
 
         return asks, bids
 
@@ -62,13 +61,13 @@ class Btce(models.Exchange):
         url = "/".join([base_url, self._symbol, 'ticker'])
         resp = self._request('GET', url).json()
 
-        return models.Ticker(avg=resp['ticker']['avg'],
-                      high=resp['ticker']['high'],
-                      low=resp['ticker']['low'],
-                      last=resp['ticker']['last'],
-                      buy=resp['ticker']['buy'],
-                      sell=resp['ticker']['sell'],
-                      vol=resp['ticker']['vol']
+        return models.Ticker(avg=self._create_decimal(resp['ticker']['avg']),
+                      high=self._create_decimal(resp['ticker']['high']),
+                      low=self._create_decimal(resp['ticker']['low']),
+                      last=self._create_decimal(resp['ticker']['last']),
+                      buy=self._create_decimal(resp['ticker']['buy']),
+                      sell=self._create_decimal(resp['ticker']['sell']),
+                      vol=self._create_decimal(resp['ticker']['vol'])
                       )
 
     def trades(self):
@@ -82,8 +81,8 @@ class Btce(models.Exchange):
         trades = []
         for t in resp:
             date = datetime.fromtimestamp(int(t['date']))
-            amount = t['amount']
-            price = t['price']
+            amount = self._create_decimal(t['amount'])
+            price = self._create_decimal(t['price'])
             tid = t['tid']
             trades.append(models.Trade(date=date,
                                        amount=amount,

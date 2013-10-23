@@ -49,12 +49,12 @@ class MtGox(models.Exchange):
         resp = resp['data']
         asks = []
         for o in resp['asks']:
-            asks.append(models.Order(price=o['price'],
-                                     amount=o['amount']))
+            asks.append(models.Order(price=self._create_decimal(o['price']),
+                                     amount=self._create_decimal(o['amount'])))
         bids = []
         for oi in resp['bids']:
-            bids.append(models.Order(price=o['price'],
-                                     amount=o['amount']))
+            bids.append(models.Order(price=self._create_decimal(o['price']),
+                                     amount=self._create_decimal(o['amount'])))
 
         return asks, bids
 
@@ -69,13 +69,13 @@ class MtGox(models.Exchange):
 
         resp = self._request('GET', url).json()
         resp = resp['data']
-        return models.Ticker(avg=float(resp['avg']['value']),
-                             buy=float(resp['buy']['value']),
-                             high=float(resp['high']['value']),
-                             last=float(resp['last']['value']),
-                             low=float(resp['low']['value']),
-                             sell=float(resp['sell']['value']),
-                             vol=float(resp['vol']['value']))
+        return models.Ticker(avg=self._create_decimal(resp['avg']['value']),
+                             buy=self._create_decimal(resp['buy']['value']),
+                             high=self._create_decimal(resp['high']['value']),
+                             last=self._create_decimal(resp['last']['value']),
+                             low=self._create_decimal(resp['low']['value']),
+                             sell=self._create_decimal(resp['sell']['value']),
+                             vol=self._create_decimal(resp['vol']['value']))
 
     def trades(self):
         """@todo: Docstring for trades
@@ -91,9 +91,9 @@ class MtGox(models.Exchange):
         trades = []
         for t in resp:
             date = datetime.fromtimestamp(t['date'])
-            amount = t['amount']
-            price = t['price']
-            tid = t['tid']
+            amount = self._create_decimal(t['amount'])
+            price = self._create_decimal(t['price'])
+            tid = int(t['tid'])
             trades.append(models.Trade(date=date,
                                        amount=amount,
                                        price=price,

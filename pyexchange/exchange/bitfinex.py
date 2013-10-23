@@ -34,12 +34,12 @@ class Bitfinex(models.Exchange):
 
         asks = []
         for o in resp['asks']:
-            asks.append(models.Order(price=o['price'],
-                                     amount=o['amount']))
+            asks.append(models.Order(price=self._create_decimal(o['price']),
+                                     amount=self._create_decimal(o['amount'])))
         bids = []
         for o in resp['bids']:
-            bids.append(models.Order(price=o['price'],
-                                     amount=o['amount']))
+            bids.append(models.Order(price=self._create_decimal(o['price']),
+                                     amount=self._create_decimal(o['amount'])))
 
         return asks, bids
 
@@ -52,12 +52,12 @@ class Bitfinex(models.Exchange):
 
         resp = self._request('GET', url).json()
 
-        return models.Ticker(avg=float(resp['mid']),
-                             buy=float(resp['bid']),
+        return models.Ticker(avg=self._create_decimal(resp['mid']),
+                             buy=self._create_decimal(resp['bid']),
                              high=None,
-                             last=float(resp['last_price']),
+                             last=self._create_decimal(resp['last_price']),
                              low=None,
-                             sell=float(resp['ask']),
+                             sell=self._create_decimal(resp['ask']),
                              vol=None)
 
     def trades(self):
@@ -71,8 +71,8 @@ class Bitfinex(models.Exchange):
         trades = []
         for t in resp:
             date = datetime.fromtimestamp(t['timestamp'])
-            amount = t['amount']
-            price = t['price']
+            amount = self._create_decimal(t['amount'])
+            price = self._create_decimal(t['price'])
             tid = None
             trades.append(models.Trade(date=date,
                                        amount=amount,

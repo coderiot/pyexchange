@@ -28,12 +28,12 @@ class BtcChina(models.Exchange):
 
         asks = []
         for p, a in resp['asks']:
-            asks.append(models.Order(price=p,
-                                     amount=a))
+            asks.append(models.Order(price=self._create_decimal(p),
+                                     amount=self._create_decimal(a)))
         bids = []
         for p, a in resp['bids']:
-            bids.append(models.Order(price=p,
-                                     amount=a))
+            bids.append(models.Order(price=self._create_decimal(p),
+                                     amount=self._create_decimal(a)))
 
         return asks, bids
 
@@ -47,12 +47,12 @@ class BtcChina(models.Exchange):
         resp = resp['ticker']
 
         return models.Ticker(avg=None,
-                             high=float(resp['high']),
-                             low=float(resp['low']),
-                             last=float(resp['last']),
-                             buy=float(resp['buy']),
-                             sell=float(resp['sell']),
-                             vol=float(resp['vol']))
+                             high=self._create_decimal(resp['high']),
+                             low=self._create_decimal(resp['low']),
+                             last=self._create_decimal(resp['last']),
+                             buy=self._create_decimal(resp['buy']),
+                             sell=self._create_decimal(resp['sell']),
+                             vol=self._create_decimal(resp['vol']))
 
     def trades(self):
         """@todo: Docstring for trades
@@ -65,8 +65,8 @@ class BtcChina(models.Exchange):
         trades = []
         for t in resp:
             date = datetime.fromtimestamp(int(t['date']))
-            amount = t['amount']
-            price = t['price']
+            amount = self._create_decimal(t['amount'])
+            price = self._create_decimal(t['price'])
             tid = int(t['tid'])
             trades.append(models.Trade(date=date,
                                        amount=amount,
