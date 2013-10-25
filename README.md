@@ -51,13 +51,13 @@ example Result:
 ### create exchange by name with default market
 ```python
 >>> import pyexchange
->>> ex = pyexchange.get_exchange('mtgox')
+>>> ex = pyexchange.new_exchange('mtgox')
 ```
 
 ### create exchange by name and market
 ```python
 >>> import pyexchange
->>> ex = pyexchange.get_exchange('mtgox', 'btc_eur')
+>>> ex = pyexchange.new_exchange('mtgox', 'btc_eur')
 ```
 
 ### find available markets
@@ -69,7 +69,7 @@ example Result:
 ### list markets by exchange
 ```python
 >>> import pyexchange
->>> ex = pyexchange.get_exchange('bitfinex')
+>>> ex = pyexchange.new_exchange('bitfinex')
 >>> ex.markets()
 ```
 
@@ -88,7 +88,7 @@ Result:
 ### set market for exchange
 ```python
 >>> import pyexchange
->>> ex = pyexchange.get_exchange('mtgox')
+>>> ex = pyexchange.new_exchange('mtgox')
 >>> ex.market = 'btc_eur' # set market
 >>> print ex.market # current market
 ```
@@ -96,7 +96,7 @@ Result:
 ### get exchange ticker
 ```python
 >>> import pyexchange
->>> ex = pyexchange.get_exchange('mtgox')
+>>> ex = pyexchange.new_exchange('mtgox')
 >>> print ex.ticker()
 ```
 
@@ -108,7 +108,7 @@ Ticker(avg=Decimal('157.19387'), high=Decimal('163.0'), low=Decimal('151.13324')
 ### get exchange orderbook
 ```python
 >>> import pyexchange
->>> ex = pyexchange.get_exchange('mtgox')
+>>> ex = pyexchange.new_exchange('mtgox')
 >>> asks, bids = ex.depth()
 >>> print asks
 ```
@@ -127,7 +127,7 @@ Result:
 ### get exchange trades
 ```python
 >>> import pyexchange
->>> ex = pyexchange.get_exchange('mtgox')
+>>> ex = pyexchange.new_exchange('mtgox')
 >>> trades = ex.trades()
 >>> print trades
 ```

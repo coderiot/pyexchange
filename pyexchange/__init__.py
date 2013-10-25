@@ -28,7 +28,7 @@ def exchanges():
     return sorted([name for name in exchange.models.Exchange._register])
 
 
-def get_exchange(name, market=None):
+def new_exchange(name, market=None):
     """Create exchange object by name of the exchange.
 
     :name: name for the exchange
