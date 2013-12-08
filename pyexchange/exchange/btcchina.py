@@ -7,6 +7,7 @@ import models
 
 base_url = "https://btcchina.com"
 
+
 class BtcChina(models.Exchange):
     _markets_map = {'btc_cny': 'btc_cny'}
 
@@ -46,7 +47,7 @@ class BtcChina(models.Exchange):
         resp = self._request('GET', url).json()
         resp = resp['ticker']
 
-        return models.Ticker(avg=None,
+        return models.Ticker(
                              high=self._create_decimal(resp['high']),
                              low=self._create_decimal(resp['low']),
                              last=self._create_decimal(resp['last']),

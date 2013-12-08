@@ -113,5 +113,24 @@ class TestBitstamp(unittest.TestCase):
         for k, v in ticker._asdict().items():
             self.assertIsInstance(v, decimal.Decimal)
 
+class TestBtcchina(unittest.TestCase):
+    """Test case docstring"""
+
+    def setUp(self):
+        self.ex = pyexchange.btcchina.BtcChina()
+
+    def test_markets(self):
+        exp_markets = ['btc_cny']
+        obj_markets = self.ex.markets()
+        module_markets = pyexchange.btcchina.markets()
+        self.assertItemsEqual(exp_markets, obj_markets)
+        self.assertItemsEqual(exp_markets, module_markets)
+
+    def test_ticker(self):
+        ticker = self.ex.ticker()
+        self.assertIsInstance(ticker, models.Ticker)
+        for k, v in ticker._asdict().items():
+            self.assertIsInstance(v, decimal.Decimal)
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)
