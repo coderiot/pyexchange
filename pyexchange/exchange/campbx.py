@@ -46,13 +46,11 @@ class Campbx(models.Exchange):
         #resp = self._request_ticker().json()
         url = base_url + "xticker.php"
         resp = self._request("GET", url).json()
-        return models.Ticker(avg=None,# high + low / 2.
-                             high=None,
-                             low=None,
-                             last=float(resp['Last Trade']),
-                             buy=float(resp['Best Bid']),
-                             sell=float(resp['Best Ask']),
-                             vol=None)
+        return models.Ticker(
+                             last=self._create_decimal(resp['Last Trade']),
+                             buy=self._create_decimal(resp['Best Bid']),
+                             sell=self._create_decimal(resp['Best Ask']),
+                             )
 
     def trades(self):
         """@todo: Docstring for trades
