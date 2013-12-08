@@ -25,7 +25,7 @@ class TestExchangesList(unittest.TestCase):
         exs = pyexchange.exchanges()
         self.assertNotEqual(exs, [])
 
-    def test_exchanges_check_elemets(self):
+    def test_exchanges_check_elements(self):
         exp_exs = ['bitcurex',
                    'bitfinex',
                    'bitstamp',
@@ -87,6 +87,11 @@ class TestBitfinex(unittest.TestCase):
         self.assertItemsEqual(exp_markets, obj_markets)
         self.assertItemsEqual(exp_markets, module_markets)
 
+    def test_ticker(self):
+        ticker = self.ex.ticker()
+        self.assertIsInstance(ticker, models.Ticker)
+        for k, v in ticker._asdict().items():
+            self.assertIsInstance(v, decimal.Decimal)
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)

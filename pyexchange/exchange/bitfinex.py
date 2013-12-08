@@ -54,11 +54,9 @@ class Bitfinex(models.Exchange):
 
         return models.Ticker(avg=self._create_decimal(resp['mid']),
                              buy=self._create_decimal(resp['bid']),
-                             high=None,
                              last=self._create_decimal(resp['last_price']),
-                             low=None,
                              sell=self._create_decimal(resp['ask']),
-                             vol=None)
+                             )
 
     def trades(self):
         """@todo: Docstring for trades
