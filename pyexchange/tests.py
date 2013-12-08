@@ -249,5 +249,26 @@ class TestCryptsy(unittest.TestCase):
         for k, v in ticker._asdict().items():
             self.assertIsInstance(v, decimal.Decimal)
 
+
+class TestIntersango(unittest.TestCase):
+    """Test case docstring"""
+
+    def setUp(self):
+        self.ex = pyexchange.intersango.Intersango()
+
+    def test_markets(self):
+        exp_markets = ['btc_usd', 'btc_eur', 'btc_gbp', 'btc_pln']
+
+        obj_markets = self.ex.markets()
+        module_markets = pyexchange.intersango.markets()
+        self.assertItemsEqual(exp_markets, obj_markets)
+        self.assertItemsEqual(exp_markets, module_markets)
+
+    def test_ticker(self):
+        ticker = self.ex.ticker()
+        self.assertIsInstance(ticker, models.Ticker)
+        for k, v in ticker._asdict().items():
+            self.assertIsInstance(v, decimal.Decimal)
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)

@@ -54,11 +54,9 @@ class Intersango(models.Exchange):
                                                  'ticker',
                                                  self._symbol)
         resp = self._request('GET', url).json()
-        return models.Ticker(avg=None,
+        return models.Ticker(
                              buy=self._create_decimal(resp['buy']),
-                             high=None,
                              last=self._create_decimal(resp['last']),
-                             low=None,
                              sell=self._create_decimal(resp['sell']),
                              vol=self._create_decimal(resp['vol']))
 
