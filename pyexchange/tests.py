@@ -316,5 +316,30 @@ class TestLocalbitcoins(unittest.TestCase):
         for k, v in ticker._asdict().items():
             self.assertIsInstance(v, decimal.Decimal)
 
+
+class TestMtGox(unittest.TestCase):
+    """Test case docstring"""
+
+    def setUp(self):
+        self.ex = pyexchange.mtgox.MtGox()
+
+    def test_markets(self):
+        exp_markets = ['btc_usd', 'btc_gpb', 'btc_eur',
+                       'btc_jpy', 'btc_aud', 'btc_cad',
+                       'btc_chf', 'btc_cny', 'btc_dkk',
+                       'btc_hkd', 'btc_pln', 'btc_rub',
+                       'btc_sek', 'btc_sgd', 'btc_thb',
+                       'btc_nok', 'btc_czk']
+        obj_markets = self.ex.markets()
+        module_markets = pyexchange.mtgox.markets()
+        self.assertItemsEqual(exp_markets, obj_markets)
+        self.assertItemsEqual(exp_markets, module_markets)
+
+    def test_ticker(self):
+        ticker = self.ex.ticker()
+        self.assertIsInstance(ticker, models.Ticker)
+        for k, v in ticker._asdict().items():
+            self.assertIsInstance(v, decimal.Decimal)
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)
