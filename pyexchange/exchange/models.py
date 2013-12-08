@@ -88,13 +88,26 @@ class Exchange(object):
         return requests.request(*args, **kwargs)
 
 
-Ticker = namedtuple("Ticker", ["avg",
+TickerT = namedtuple("Ticker", ["avg",
                                "high",
                                "low",
                                "last",
                                "buy",
                                "sell",
                                "vol"])
+
+
+class Ticker(TickerT):
+    def __new__(cls, avg=decimal.Decimal('nan'),
+                     high=decimal.Decimal('nan'),
+                     low=decimal.Decimal('nan'),
+                     last=decimal.Decimal('nan'),
+                     buy=decimal.Decimal('nan'),
+                     sell=decimal.Decimal('nan'),
+                     vol=decimal.Decimal('nan'),
+                     ):
+        return super(Ticker, cls).__new__(cls, avg, high, low, last, buy, sell, vol)
+
 
 Trade = namedtuple("Trade", ["date",
                              "price",
