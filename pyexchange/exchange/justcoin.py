@@ -54,7 +54,7 @@ class Justcoin(models.Exchange):
             if market['id'] == self._symbol:
                 resp = market
 
-        return models.Ticker(avg=None,
+        return models.Ticker(
                              buy=self._create_decimal(resp['ask']),
                              high=self._create_decimal(resp['high']),
                              last=self._create_decimal(resp['last']),
