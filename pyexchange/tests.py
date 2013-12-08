@@ -203,5 +203,51 @@ class TestCryptotrade(unittest.TestCase):
         for k, v in ticker._asdict().items():
             self.assertIsInstance(v, decimal.Decimal)
 
+
+class TestCryptsy(unittest.TestCase):
+    """Test case docstring"""
+
+    def setUp(self):
+        self.ex = pyexchange.cryptsy.Cryptsy()
+
+    def test_markets(self):
+        exp_markets = ['frk_btc', 'lky_btc', 'nvc_btc',
+                       'ftc_btc', 'cgb_btc', 'frc_btc',
+                       'sbc_btc', 'dbl_ltc', 'jkc_ltc',
+                       'phs_btc', 'net_ltc', 'spt_btc',
+                       'mec_ltc', 'alf_btc', 'ybc_btc',
+                       'elp_ltc', 'fst_btc', 'gld_ltc',
+                       'anc_btc', 'tix_xpm', 'nec_btc',
+                       'sxc_ltc', 'zet_btc', 'ifc_ltc',
+                       'cap_btc', 'ppc_btc', 'kgc_btc',
+                       'qrk_btc', 'red_ltc', 'net_xpm',
+                       'wdc_btc', 'cent_ltc',
+                       'elc_btc', 'mec_btc', 'xpm_ltc',
+                       'nmc_btc', 'dgc_ltc', 'ltc_btc',
+                       'dmd_btc', 'clr_btc', 'gme_ltc',
+                       'gdc_btc', 'wdc_ltc', 'arg_btc',
+                       'pxc_ltc', 'mst_ltc', 'csc_btc',
+                       'nbl_btc', 'cmc_btc', 'ezc_ltc',
+                       'amc_btc', 'trc_btc', 'xnc_ltc',
+                       'tix_ltc', 'ifc_xpm', 'mem_ltc',
+                       'src_btc', 'cpr_ltc', 'dgc_btc',
+                       'yac_btc', 'adt_ltc', 'pxc_btc',
+                       'bte_btc', 'flo_ltc', 'bqc_btc',
+                       'btg_btc', 'nrb_btc', 'crc_btc',
+                       'glc_btc', 'xpm_btc', 'btb_btc',
+                       'pyc_btc', 'ryc_ltc', 'gld_btc',
+                       'ixc_btc', 'mnc_btc', 'glx_btc',
+                       'emd_btc', 'buk_btc', 'dvc_ltc']
+        obj_markets = self.ex.markets()
+        module_markets = pyexchange.cryptsy.markets()
+        self.assertItemsEqual(exp_markets, obj_markets)
+        self.assertItemsEqual(exp_markets, module_markets)
+
+    def test_ticker(self):
+        ticker = self.ex.ticker()
+        self.assertIsInstance(ticker, models.Ticker)
+        for k, v in ticker._asdict().items():
+            self.assertIsInstance(v, decimal.Decimal)
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)
