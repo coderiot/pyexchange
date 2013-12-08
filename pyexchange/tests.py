@@ -341,5 +341,28 @@ class TestMtGox(unittest.TestCase):
         for k, v in ticker._asdict().items():
             self.assertIsInstance(v, decimal.Decimal)
 
+
+class TestRocktrading(unittest.TestCase):
+    """Test case docstring"""
+
+    def setUp(self):
+        self.ex = pyexchange.rocktrading.RockTrading()
+
+    def test_markets(self):
+        exp_markets = ['btc_eur', 'btc_usd', 'btc_xrp',
+                       'eur_xrp', 'ltc_btc', 'ltc_eur']
+
+        obj_markets = self.ex.markets()
+        module_markets = pyexchange.rocktrading.markets()
+        self.assertItemsEqual(exp_markets, obj_markets)
+        self.assertItemsEqual(exp_markets, module_markets)
+
+    def test_ticker(self):
+        ticker = self.ex.ticker()
+        self.assertIsInstance(ticker, models.Ticker)
+        for k, v in ticker._asdict().items():
+            self.assertIsInstance(v, decimal.Decimal)
+
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)

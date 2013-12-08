@@ -55,13 +55,10 @@ class RockTrading(models.Exchange):
         resp = self._request('GET', url, verify=False).json()
         resp = resp['result'][0]
 
-        return models.Ticker(avg=None,
+        return models.Ticker(
                              buy=self._create_decimal(resp['bid']),
-                             high=None,
-                             last=None,
-                             low=None,
                              sell=self._create_decimal(resp['ask']),
-                             vol=None)
+                             )
 
     def trades(self):
         """@todo: Docstring for trades
