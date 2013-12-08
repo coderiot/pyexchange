@@ -113,6 +113,7 @@ class TestBitstamp(unittest.TestCase):
         for k, v in ticker._asdict().items():
             self.assertIsInstance(v, decimal.Decimal)
 
+
 class TestBtcchina(unittest.TestCase):
     """Test case docstring"""
 
@@ -123,6 +124,31 @@ class TestBtcchina(unittest.TestCase):
         exp_markets = ['btc_cny']
         obj_markets = self.ex.markets()
         module_markets = pyexchange.btcchina.markets()
+        self.assertItemsEqual(exp_markets, obj_markets)
+        self.assertItemsEqual(exp_markets, module_markets)
+
+    def test_ticker(self):
+        ticker = self.ex.ticker()
+        self.assertIsInstance(ticker, models.Ticker)
+        for k, v in ticker._asdict().items():
+            self.assertIsInstance(v, decimal.Decimal)
+
+
+class TestBtce(unittest.TestCase):
+    """Test case docstring"""
+
+    def setUp(self):
+        self.ex = pyexchange.btce.Btce()
+
+    def test_markets(self):
+        exp_markets = ['btc_usd', 'btc_eur', 'btc_rur',
+                       'ltc_btc', 'ltc_usd', 'ltc_rur',
+                       'ltc_eur', 'nmc_btc', 'nmc_usd',
+                       'nvc_btc', 'nvc_usd', 'usd_rur',
+                       'eur_usd', 'trc_btc', 'ppc_btc',
+                       'ftc_btc']
+        obj_markets = self.ex.markets()
+        module_markets = pyexchange.btce.markets()
         self.assertItemsEqual(exp_markets, obj_markets)
         self.assertItemsEqual(exp_markets, module_markets)
 
