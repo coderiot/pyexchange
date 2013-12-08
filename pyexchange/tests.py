@@ -158,6 +158,7 @@ class TestBtce(unittest.TestCase):
         for k, v in ticker._asdict().items():
             self.assertIsInstance(v, decimal.Decimal)
 
+
 class TestCampbx(unittest.TestCase):
     """Test case docstring"""
 
@@ -168,6 +169,31 @@ class TestCampbx(unittest.TestCase):
         exp_markets = ['btc_usd']
         obj_markets = self.ex.markets()
         module_markets = pyexchange.campbx.markets()
+        self.assertItemsEqual(exp_markets, obj_markets)
+        self.assertItemsEqual(exp_markets, module_markets)
+
+    def test_ticker(self):
+        ticker = self.ex.ticker()
+        self.assertIsInstance(ticker, models.Ticker)
+        for k, v in ticker._asdict().items():
+            self.assertIsInstance(v, decimal.Decimal)
+
+
+class TestCryptotrade(unittest.TestCase):
+    """Test case docstring"""
+
+    def setUp(self):
+        self.ex = pyexchange.cryptotrade.Cryptotrade()
+
+    def test_markets(self):
+        exp_markets = ['btc_usd', 'btc_eur', 'ltc_usd',
+                       'ltc_eur', 'ltc_btc', 'nmc_usd',
+                       'nmc_btc', 'xpm_usd', 'xpm_btc',
+                       'xpm_ppc', 'ppc_usd', 'ppc_btc',
+                       'trc_btc', 'ftc_usd', 'ftc_btc',
+                       'dvc_btc', 'wdc_btc', 'dgc_btc']
+        obj_markets = self.ex.markets()
+        module_markets = pyexchange.cryptotrade.markets()
         self.assertItemsEqual(exp_markets, obj_markets)
         self.assertItemsEqual(exp_markets, module_markets)
 

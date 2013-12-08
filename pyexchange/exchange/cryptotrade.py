@@ -63,7 +63,7 @@ class Cryptotrade(models.Exchange):
         url = "%s/%s/%s" % (base_url, 'ticker', self._symbol)
         resp = self._request('GET', url).json()
 
-        return models.Ticker(avg=None,# high + low / 2.
+        return models.Ticker(
                              high=self._create_decimal(resp['data']['high']),
                              low=self._create_decimal(resp['data']['low']),
                              last=self._create_decimal(resp['data']['last']),
