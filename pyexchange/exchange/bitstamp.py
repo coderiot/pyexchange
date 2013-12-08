@@ -47,7 +47,7 @@ class Bitstamp(models.Exchange):
         url = "/".join([base_url, 'ticker'])
         resp = self._request('GET', url).json()
 
-        return models.Ticker(avg=None,# high + low / 2.
+        return models.Ticker(
                              high=self._create_decimal(resp['high']),
                              low=self._create_decimal(resp['low']),
                              last=self._create_decimal(resp['last']),

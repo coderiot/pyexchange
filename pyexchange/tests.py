@@ -93,5 +93,25 @@ class TestBitfinex(unittest.TestCase):
         for k, v in ticker._asdict().items():
             self.assertIsInstance(v, decimal.Decimal)
 
+
+class TestBitstamp(unittest.TestCase):
+    """Test case docstring"""
+
+    def setUp(self):
+        self.ex = pyexchange.bitstamp.Bitstamp()
+
+    def test_markets(self):
+        exp_markets = ['btc_usd']
+        obj_markets = self.ex.markets()
+        module_markets = pyexchange.bitstamp.markets()
+        self.assertItemsEqual(exp_markets, obj_markets)
+        self.assertItemsEqual(exp_markets, module_markets)
+
+    def test_ticker(self):
+        ticker = self.ex.ticker()
+        self.assertIsInstance(ticker, models.Ticker)
+        for k, v in ticker._asdict().items():
+            self.assertIsInstance(v, decimal.Decimal)
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)
