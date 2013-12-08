@@ -70,11 +70,7 @@ class LocalBitcoins(models.Exchange):
         resp = resp[self._symbol]
 
         return models.Ticker(avg=self._create_decimal(resp['avg_24h']),
-                             buy=None,
-                             high=None,
                              last=self._create_decimal(resp['rates']['last']),
-                             low=None,
-                             sell=None,
                              vol=self._create_decimal(resp['volume_btc']))
 
     def trades(self):

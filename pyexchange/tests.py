@@ -270,6 +270,7 @@ class TestIntersango(unittest.TestCase):
         for k, v in ticker._asdict().items():
             self.assertIsInstance(v, decimal.Decimal)
 
+
 class TestJustcoin(unittest.TestCase):
     """Test case docstring"""
 
@@ -281,6 +282,31 @@ class TestJustcoin(unittest.TestCase):
 
         obj_markets = self.ex.markets()
         module_markets = pyexchange.justcoin.markets()
+        self.assertItemsEqual(exp_markets, obj_markets)
+        self.assertItemsEqual(exp_markets, module_markets)
+
+    def test_ticker(self):
+        ticker = self.ex.ticker()
+        self.assertIsInstance(ticker, models.Ticker)
+        for k, v in ticker._asdict().items():
+            self.assertIsInstance(v, decimal.Decimal)
+
+
+class TestLocalbitcoins(unittest.TestCase):
+    """Test case docstring"""
+
+    def setUp(self):
+        self.ex = pyexchange.localbitcoins.LocalBitcoins()
+
+    def test_markets(self):
+        exp_markets = ['btc_ars', 'btc_aud', 'btc_brl',
+                       'btc_cad', 'btc_eur', 'btc_gbp',
+                       'btc_ghs', 'btc_huf', 'btc_mxn',
+                       'btc_nzd', 'btc_php', 'btc_pln',
+                       'btc_rub', 'btc_sgd', 'btc_thb',
+                       'btc_usd', 'btc_zar']
+        obj_markets = self.ex.markets()
+        module_markets = pyexchange.localbitcoins.markets()
         self.assertItemsEqual(exp_markets, obj_markets)
         self.assertItemsEqual(exp_markets, module_markets)
 
