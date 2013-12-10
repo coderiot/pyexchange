@@ -367,6 +367,7 @@ class TestCryptotrade(unittest.TestCase):
             self.assertIsInstance(t.price, decimal.Decimal)
             self.assertIsInstance(t.amount, decimal.Decimal)
 
+
 class TestCryptsy(unittest.TestCase):
     """Test case docstring"""
 
@@ -411,6 +412,29 @@ class TestCryptsy(unittest.TestCase):
         self.assertIsInstance(ticker, models.Ticker)
         for k, v in ticker._asdict().items():
             self.assertIsInstance(v, decimal.Decimal)
+
+    def test_depth(self):
+        asks, bids = self.ex.depth()
+        self.assertIsInstance(asks, list)
+        self.assertIsInstance(bids, list)
+        for a in asks:
+            self.assertIsInstance(a, models.Order)
+            self.assertIsInstance(a.price, decimal.Decimal)
+            self.assertIsInstance(a.amount, decimal.Decimal)
+
+        for b in bids:
+            self.assertIsInstance(b, models.Order)
+            self.assertIsInstance(b.price, decimal.Decimal)
+            self.assertIsInstance(b.amount, decimal.Decimal)
+
+    def test_trades(self):
+        trades = self.ex.trades()
+        self.assertIsInstance(trades, list)
+        for t in trades:
+            self.assertIsInstance(t, models.Trade)
+            self.assertIsInstance(t.date, datetime.datetime)
+            self.assertIsInstance(t.price, decimal.Decimal)
+            self.assertIsInstance(t.amount, decimal.Decimal)
 
 
 class TestIntersango(unittest.TestCase):

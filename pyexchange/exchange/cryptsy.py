@@ -108,11 +108,11 @@ class Cryptsy(models.Exchange):
 
         """
         url = "%s?method=%s&marketid=%s" % (public_url,
-                                            'singlemarketdata',
+                                            'singleorderdata',
                                             self._symbol)
         resp = self._request('GET', url).json()
-        key = resp['return']['markets'].keys()[0]
-        resp = resp['return']['markets'][key]
+        sym = self.market.split('_')[0].upper()
+        resp = resp['return'][sym]
 
         asks = []
         for order in resp['sellorders']:
