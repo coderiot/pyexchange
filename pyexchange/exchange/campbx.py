@@ -29,12 +29,12 @@ class Campbx(models.Exchange):
 
         asks = []
         for p, a in resp['Asks']:
-            asks.append(models.Order(price=p,
-                                     amount=a))
+            asks.append(models.Order(price=self._create_decimal(p),
+                                     amount=self._create_decimal(a)))
         bids = []
         for p, a in resp['Bids']:
-            bids.append(models.Order(price=p,
-                                     amount=a))
+            bids.append(models.Order(price=self._create_decimal(p),
+                                     amount=self._create_decimal(a)))
 
         return asks, bids
 
