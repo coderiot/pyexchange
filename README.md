@@ -22,6 +22,7 @@ $ pip install -e git+https://github.com/coderiot/pyexchange.git#egg=pyexchange
  - [localbitcions](https://localbitcoins.com/)
  - [mtgox](https://www.mtgox.com/)
  - [The Rock Trading](https://www.therocktrading.com/)
+ - [Bter](https://www.bter.com/)
 
 ## Usage
 ### list supported exchanges
