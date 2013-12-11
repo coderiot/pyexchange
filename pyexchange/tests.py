@@ -666,5 +666,65 @@ class TestRocktrading(unittest.TestCase):
             self.assertIsInstance(t.amount, decimal.Decimal)
 
 
+class TestBter(unittest.TestCase):
+    """Test case docstring"""
+
+    def setUp(self):
+        self.ex = pyexchange.bter.Bter()
+
+    def test_markets(self):
+        exp_markets = ["btc_cny", "ltc_cny", "ftc_cny", "frc_cny",
+                       "ppc_cny", "trc_cny", "wdc_cny", "yac_cny",
+                       "cnc_cny", "bqc_cny", "ifc_cny", "zcc_cny",
+                       "cmc_cny", "jry_cny", "xpm_cny",
+                       "pts_cny", "tag_cny", "tix_cny", "src_cny",
+                       "mec_cny", "nmc_cny", "qrk_cny", "btb_cny",
+                       "exc_cny", "dtc_cny", "cent_cny", "red_cny",
+                       "zet_cny", "ftc_ltc", "frc_ltc", "ppc_ltc",
+                       "trc_ltc", "nmc_ltc", "wdc_ltc", "yac_ltc",
+                       "cnc_ltc", "bqc_ltc", "ifc_ltc", "red_ltc",
+                       "tix_ltc", "cent_ltc", "ltc_btc", "nmc_btc",
+                       "ppc_btc", "trc_btc", "frc_btc", "ftc_btc",
+                       "bqc_btc", "cnc_btc", "btb_btc", "yac_btc",
+                       "wdc_btc", "zcc_btc", "xpm_btc", "zet_btc",
+                       "src_btc", "sav_btc", "cdc_btc", "cmc_btc",
+                       "jry_btc", "tag_btc", "pts_btc", "dtc_btc",
+                       "exc_btc", "nec_btc", "mec_btc", "qrk_btc",
+                       "anc_btc", "nvc_btc", "buk_btc", "myminer_btc"]
+
+        obj_markets = self.ex.markets()
+        module_markets = pyexchange.bter.markets()
+        self.assertItemsEqual(exp_markets, obj_markets)
+        self.assertItemsEqual(exp_markets, module_markets)
+
+    def test_ticker(self):
+        ticker = self.ex.ticker()
+        self.assertIsInstance(ticker, models.Ticker)
+        for k, v in ticker._asdict().items():
+            self.assertIsInstance(v, decimal.Decimal)
+
+    def test_depth(self):
+        asks, bids = self.ex.depth()
+        self.assertIsInstance(asks, list)
+        self.assertIsInstance(bids, list)
+        for a in asks:
+            self.assertIsInstance(a, models.Order)
+            self.assertIsInstance(a.price, decimal.Decimal)
+            self.assertIsInstance(a.amount, decimal.Decimal)
+
+        for b in bids:
+            self.assertIsInstance(b, models.Order)
+            self.assertIsInstance(b.price, decimal.Decimal)
+            self.assertIsInstance(b.amount, decimal.Decimal)
+
+    def test_trades(self):
+        trades = self.ex.trades()
+        self.assertIsInstance(trades, list)
+        for t in trades:
+            self.assertIsInstance(t, models.Trade)
+            self.assertIsInstance(t.date, datetime.datetime)
+            self.assertIsInstance(t.price, decimal.Decimal)
+            self.assertIsInstance(t.amount, decimal.Decimal)
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)
