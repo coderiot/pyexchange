@@ -10,4 +10,5 @@ __all__ = ['mtgox',
            'intersango',
            'localbitcoins',
            'rocktrading',
-           'justcoin']
+           'justcoin',
+           'bter']
