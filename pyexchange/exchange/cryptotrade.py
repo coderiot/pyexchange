@@ -26,6 +26,7 @@ class Cryptotrade(models.Exchange):
                     'ftc_btc': 'ftc_btc',
                     'dvc_btc': 'dvc_btc',
                     'wdc_btc': 'wdc_btc',
+                    'wdc_usd': 'wdc_usd',
                     'dgc_btc': 'dgc_btc'}
 
     def __init__(self, market="btc_usd"):

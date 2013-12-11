@@ -332,7 +332,8 @@ class TestCryptotrade(unittest.TestCase):
                        'nmc_btc', 'xpm_usd', 'xpm_btc',
                        'xpm_ppc', 'ppc_usd', 'ppc_btc',
                        'trc_btc', 'ftc_usd', 'ftc_btc',
-                       'dvc_btc', 'wdc_btc', 'dgc_btc']
+                       'dvc_btc', 'wdc_btc', 'dgc_btc',
+                       'wdc_usd']
         obj_markets = self.ex.markets()
         module_markets = pyexchange.cryptotrade.markets()
         self.assertItemsEqual(exp_markets, obj_markets)
