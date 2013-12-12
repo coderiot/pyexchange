@@ -792,5 +792,103 @@ class TestCoinse(unittest.TestCase):
             self.assertIsInstance(t.price, decimal.Decimal)
             self.assertIsInstance(t.amount, decimal.Decimal)
 
+class TestVircurex(unittest.TestCase):
+    """Test case docstring"""
+
+    def setUp(self):
+        self.ex = pyexchange.vircurex.Vircurex()
+
+    def test_markets(self):
+        exp_markets = ["frc_ppc", "frc_dgc", "frc_usd", "frc_ltc", "frc_xpm",
+                       "frc_anc", "frc_ixc", "frc_trc", "frc_dvc", "frc_i0c",
+                       "frc_ftc", "frc_wdc", "frc_nvc", "frc_nmc", "frc_btc",
+                       "frc_eur", "dgc_frc", "dgc_i0c", "dgc_usd", "dgc_xpm",
+                       "dgc_anc", "dgc_ixc", "dgc_trc", "dgc_dvc", "dgc_ltc",
+                       "dgc_ftc", "dgc_ppc", "dgc_nvc", "dgc_nmc", "dgc_btc",
+                       "dgc_wdc", "dgc_eur", "usd_frc", "usd_dgc", "usd_wdc",
+                       "usd_ltc", "usd_xpm", "usd_anc", "usd_ixc", "usd_trc",
+                       "usd_dvc", "usd_i0c", "usd_ftc", "usd_ppc", "usd_nvc",
+                       "usd_nmc", "usd_btc", "usd_eur", "ltc_frc", "ltc_dgc",
+                       "ltc_usd", "ltc_xpm", "ltc_anc", "ltc_ixc", "ltc_trc",
+                       "ltc_dvc", "ltc_i0c", "ltc_ftc", "ltc_ppc", "ltc_nvc",
+                       "ltc_nmc", "ltc_btc", "ltc_wdc", "ltc_eur", "xpm_frc",
+                       "xpm_dgc", "xpm_usd", "xpm_ltc", "xpm_anc", "xpm_ixc",
+                       "xpm_trc", "xpm_dvc", "xpm_i0c", "xpm_ftc", "xpm_ppc",
+                       "xpm_nvc", "xpm_nmc", "xpm_btc", "xpm_wdc", "xpm_eur",
+                       "anc_frc", "anc_dgc", "anc_usd", "anc_xpm", "anc_i0c",
+                       "anc_ixc", "anc_trc", "anc_dvc", "anc_ltc", "anc_ftc",
+                       "anc_ppc", "anc_nvc", "anc_nmc", "anc_btc", "anc_wdc",
+                       "anc_eur", "ixc_frc", "ixc_dgc", "ixc_usd", "ixc_ltc",
+                       "ixc_xpm", "ixc_anc", "ixc_trc", "ixc_dvc", "ixc_i0c",
+                       "ixc_ftc", "ixc_ppc", "ixc_nvc", "ixc_nmc", "ixc_btc",
+                       "ixc_wdc", "ixc_eur", "trc_frc", "trc_dgc", "trc_usd",
+                       "trc_ltc", "trc_xpm", "trc_anc", "trc_ixc", "trc_dvc",
+                       "trc_i0c", "trc_ftc", "trc_ppc", "trc_nvc", "trc_nmc",
+                       "trc_btc", "trc_wdc", "trc_eur", "dvc_frc", "dvc_dgc",
+                       "dvc_usd", "dvc_ltc", "dvc_xpm", "dvc_anc", "dvc_ixc",
+                       "dvc_trc", "dvc_i0c", "dvc_ftc", "dvc_ppc", "dvc_nvc",
+                       "dvc_nmc", "dvc_btc", "dvc_wdc", "dvc_eur", "i0c_frc",
+                       "i0c_dgc", "i0c_usd", "i0c_xpm", "i0c_anc", "i0c_ixc",
+                       "i0c_trc", "i0c_dvc", "i0c_ltc", "i0c_ftc", "i0c_ppc",
+                       "i0c_nvc", "i0c_nmc", "i0c_btc", "i0c_wdc", "i0c_eur",
+                       "ftc_frc", "ftc_dgc", "ftc_usd", "ftc_ltc", "ftc_xpm",
+                       "ftc_anc", "ftc_ixc", "ftc_trc", "ftc_dvc", "ftc_i0c",
+                       "ftc_ppc", "ftc_nvc", "ftc_nmc", "ftc_btc", "ftc_wdc",
+                       "ftc_eur", "ppc_frc", "ppc_dgc", "ppc_usd", "ppc_ltc",
+                       "ppc_xpm", "ppc_anc", "ppc_ixc", "ppc_trc", "ppc_dvc",
+                       "ppc_i0c", "ppc_ftc", "ppc_wdc", "ppc_nvc", "ppc_nmc",
+                       "ppc_btc", "ppc_eur", "nvc_frc", "nvc_dgc", "nvc_usd",
+                       "nvc_ltc", "nvc_xpm", "nvc_anc", "nvc_ixc", "nvc_trc",
+                       "nvc_dvc", "nvc_i0c", "nvc_ftc", "nvc_ppc", "nvc_nmc",
+                       "nvc_btc", "nvc_wdc", "nvc_eur", "nmc_frc", "nmc_dgc",
+                       "nmc_usd", "nmc_ltc", "nmc_xpm", "nmc_anc", "nmc_ixc",
+                       "nmc_trc", "nmc_dvc", "nmc_i0c", "nmc_ftc", "nmc_ppc",
+                       "nmc_nvc", "nmc_btc", "nmc_wdc", "nmc_eur", "btc_frc",
+                       "btc_dgc", "btc_usd", "btc_ltc", "btc_xpm", "btc_anc",
+                       "btc_ixc", "btc_trc", "btc_dvc", "btc_i0c", "btc_ftc",
+                       "btc_ppc", "btc_nvc", "btc_nmc", "btc_wdc", "btc_eur",
+                       "wdc_frc", "wdc_dgc", "wdc_usd", "wdc_ltc", "wdc_xpm",
+                       "wdc_anc", "wdc_ixc", "wdc_trc", "wdc_dvc", "wdc_i0c",
+                       "wdc_ftc", "wdc_ppc", "wdc_nvc", "wdc_nmc", "wdc_btc",
+                       "wdc_eur", "eur_frc", "eur_dgc", "eur_usd", "eur_ltc",
+                       "eur_xpm", "eur_anc", "eur_ixc", "eur_trc", "eur_dvc",
+                       "eur_i0c", "eur_ftc", "eur_ppc", "eur_nvc", "eur_nmc",
+                       "eur_btc", "eur_wdc"]
+
+        obj_markets = self.ex.markets()
+        module_markets = pyexchange.vircurex.markets()
+        self.assertItemsEqual(exp_markets, obj_markets)
+        self.assertItemsEqual(exp_markets, module_markets)
+
+    def test_ticker(self):
+        ticker = self.ex.ticker()
+        self.assertIsInstance(ticker, models.Ticker)
+        for k, v in ticker._asdict().items():
+            self.assertIsInstance(v, decimal.Decimal)
+
+    def test_depth(self):
+        asks, bids = self.ex.depth()
+        self.assertIsInstance(asks, list)
+        self.assertIsInstance(bids, list)
+        for a in asks:
+            self.assertIsInstance(a, models.Order)
+            self.assertIsInstance(a.price, decimal.Decimal)
+            self.assertIsInstance(a.amount, decimal.Decimal)
+
+        for b in bids:
+            self.assertIsInstance(b, models.Order)
+            self.assertIsInstance(b.price, decimal.Decimal)
+            self.assertIsInstance(b.amount, decimal.Decimal)
+
+    def test_trades(self):
+        trades = self.ex.trades()
+        self.assertIsInstance(trades, list)
+        for t in trades:
+            self.assertIsInstance(t, models.Trade)
+            self.assertIsInstance(t.date, datetime.datetime)
+            self.assertIsInstance(t.price, decimal.Decimal)
+            self.assertIsInstance(t.amount, decimal.Decimal)
+            self.assertIsInstance(t.tid, int)
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)

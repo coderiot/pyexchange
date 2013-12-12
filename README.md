@@ -24,6 +24,7 @@ $ pip install -e git+https://github.com/coderiot/pyexchange.git#egg=pyexchange
  - [The Rock Trading](https://www.therocktrading.com/)
  - [Bter](https://www.bter.com/)
  - [Coins-e](https://www.coins-e.com/)
+ - [Vircurex](https://www.vircurex.com/)
 
 ## Usage
 ### list supported exchanges
