@@ -40,7 +40,8 @@ class TestExchangesList(unittest.TestCase):
                    'justcoin',
                    'localbitcoins',
                    'mtgox',
-                   'rocktrading']
+                   'rocktrading',
+                   'coinse']
 
         exs = pyexchange.exchanges()
         self.assertIsInstance(exs, list)
@@ -695,6 +696,70 @@ class TestBter(unittest.TestCase):
 
         obj_markets = self.ex.markets()
         module_markets = pyexchange.bter.markets()
+        self.assertItemsEqual(exp_markets, obj_markets)
+        self.assertItemsEqual(exp_markets, module_markets)
+
+    def test_ticker(self):
+        ticker = self.ex.ticker()
+        self.assertIsInstance(ticker, models.Ticker)
+        for k, v in ticker._asdict().items():
+            self.assertIsInstance(v, decimal.Decimal)
+
+    def test_depth(self):
+        asks, bids = self.ex.depth()
+        self.assertIsInstance(asks, list)
+        self.assertIsInstance(bids, list)
+        for a in asks:
+            self.assertIsInstance(a, models.Order)
+            self.assertIsInstance(a.price, decimal.Decimal)
+            self.assertIsInstance(a.amount, decimal.Decimal)
+
+        for b in bids:
+            self.assertIsInstance(b, models.Order)
+            self.assertIsInstance(b.price, decimal.Decimal)
+            self.assertIsInstance(b.amount, decimal.Decimal)
+
+    def test_trades(self):
+        trades = self.ex.trades()
+        self.assertIsInstance(trades, list)
+        for t in trades:
+            self.assertIsInstance(t, models.Trade)
+            self.assertIsInstance(t.date, datetime.datetime)
+            self.assertIsInstance(t.price, decimal.Decimal)
+            self.assertIsInstance(t.amount, decimal.Decimal)
+
+
+class TestCoinse(unittest.TestCase):
+    """Test case docstring"""
+
+    def setUp(self):
+        self.ex = pyexchange.coinse.Coinse()
+
+    def test_markets(self):
+        exp_markets = ["alp_btc", "alp_ltc", "amc_btc", "amc_ltc",
+                       "anc_btc", "anc_ltc", "arg_btc", "arg_ltc",
+                       "bet_btc", "bet_ltc", "bqc_btc", "btg_btc",
+                       "cgb_btc", "cin_btc", "cmc_btc", "col_ltc",
+                       "crc_btc", "csc_btc", "dem_btc", "dem_ltc",
+                       "dgc_btc", "dmd_btc", "dtc_btc", "elc_btc",
+                       "elp_btc", "emd_btc", "ezc_btc", "flo_btc",
+                       "frk_btc", "frk_ltc", "ftc_btc", "gdc_btc",
+                       "glc_btc", "glc_ltc", "glx_btc", "hyc_btc",
+                       "ifc_btc", "ifc_ltc", "ifc_xpm", "kgc_btc",
+                       "kgc_ltc", "lbw_btc", "ltc_btc", "mec_btc",
+                       "nan_btc", "net_btc", "nib_btc", "nrb_btc",
+                       "nuc_btc", "nvc_btc", "orb_btc", "orb_ltc",
+                       "ppc_btc", "ppc_xpm", "pts_btc", "pwc_btc",
+                       "pxc_btc", "pxc_ltc", "qrk_btc", "qrk_ltc",
+                       "qrk_xpm", "rch_btc", "rch_ltc", "rec_btc",
+                       "rec_ltc", "red_btc", "red_ltc", "sbc_btc",
+                       "sbc_ltc", "spt_btc", "tag_btc", "trc_btc",
+                       "uno_btc", "vlc_btc", "vlc_ltc", "wdc_btc",
+                       "xnc_btc", "xnc_ltc", "xpm_btc", "xpm_ltc",
+                       "zet_btc"]
+
+        obj_markets = self.ex.markets()
+        module_markets = pyexchange.coinse.markets()
         self.assertItemsEqual(exp_markets, obj_markets)
         self.assertItemsEqual(exp_markets, module_markets)
 
