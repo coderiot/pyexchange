@@ -2,7 +2,8 @@
 # encoding: utf-8
 
 from datetime import datetime
-
+import hashlib
+import hmac
 import models
 
 base_url = "https://bter.com/api/1"
@@ -88,14 +89,40 @@ class Bter(models.Exchange):
                     "yac_ltc": "yac_ltc",
                     "myminer_btc": "myminer_btc"}
 
-    def __init__(self, market="ltc_btc"):
+    def __init__(self, market="ltc_btc", api_key=None, api_secret=None):
         """@todo: to be defined1
 
         :currency: @todo
 
         """
+        self.api_key = api_key
+        self.api_secret = api_secret
         self.market = market
 
+    def authenticate(self, api_key, api_secret):
+        """
+        @summary: Sets BTER API key and secret needed for private trading
+                  API calls.
+
+        @param api_key: BTer API Key
+        @param api_secret: BTer API Secret
+
+        @return: Nothing.
+        """
+        self.api_key = api_key
+        self.api_secret = api_secret
+
+    def _generate_nonce(self):
+        """
+        @summary: Generate Nonce for signature.
+
+        @return: Nonce
+        """
+        return "%d" % (datetime.now().microsecond * 100)
+
+    #####
+    ## Public API functions
+    ###
     def depth(self):
         """@todo: Docstring for depth
         :returns: @todo
@@ -152,3 +179,142 @@ class Bter(models.Exchange):
 
         return trades
 
+    def pairs(self):
+        """
+        @summary: Fetches supported market pairs (f.e. 'ltc_btc')
+
+        @return: List containing all supported market pairs.
+        """
+        url = "/".join([base_url, 'pairs'])
+        resp = self._request('GET', url).json()
+
+        return resp
+
+    #####
+    ## Private API functions (API keys needed)
+    ###
+    def _query_private(self, method, params=None):
+        """
+        @summary: Performs query to private BTer API calls.
+                  Request parameters are signed with API secret
+                  and headers are set up accordingly.
+
+        @param method: API method to call (f.e. getfunds).
+        @param params: Dictionary containing all parameters for the
+                       API query.
+
+        @return: Server response
+        """
+        url = "/".join([base_url, 'private', str(method)])
+
+        if params is None:
+            params = {
+                'nonce': self._generate_nonce()
+            }
+        else:
+            params["nonce"] = self._generate_nonce()
+
+        encoded_params = models.requests.models.RequestEncodingMixin()._encode_params(params)
+        sign = hmac.new(self.api_secret, encoded_params, hashlib.sha512)
+
+        headers = {
+            'key': self.api_key,
+            'sign': sign.hexdigest()
+        }
+
+        resp = self._request('POST', url, data=params, headers=headers).json()
+
+        return resp
+
+    def getfunds(self):
+        """
+        @summary: Get information about funds.
+
+        @return: Returns two dictionaries of available as well as locked funds.
+        """
+        resp = self._query_private('getfunds')
+
+        if "available_funds" in resp:
+            available_funds = resp["available_funds"]
+        else:
+            available_funds = None
+
+        if "locked_funds" in resp:
+            locked_funds = resp["locked_funds"]
+        else:
+            locked_funds = None
+
+        return [available_funds, locked_funds]
+
+    def placeorder(self, order_type, rate, amount, pair=None):
+        """
+        @summary: Order placement.
+
+        @param pair: Currency pair (f.e. 'ltc_btc')
+        @param order_type: Trading type ('SELL' or 'BUY')
+        @param rate: Buy or sell rate (f.e. '0.023')
+        @param amount: Buy or sell amount (f.e. '100')
+
+        @return: Server response.
+        """
+        if pair is None:
+            pair = str(self._market)
+
+        params = {
+            'pair': str(pair),
+            'type': str(order_type),
+            'rate': str(rate),
+            'amount': str(amount)
+        }
+        resp = self._query_private('placeorder', params)
+
+        return resp
+
+    def cancelorder(self, order_id):
+        """
+        @summary: Cancel an order.
+
+        @param order_id: Order ID (f.e. '123456')
+
+        @return: Server response.
+
+        """
+        params = {
+            'order_id': str(order_id)
+        }
+
+        resp = self._query_private('cancelorder', params)
+
+        return resp
+
+    def getorder(self, order_id):
+        """
+        @summary: Get detailed info about specific order.
+
+        @param order_id: Order ID (f.e. '123456')
+
+        @return: Order info.
+        """
+        params = {
+            'order_id': str(order_id)
+        }
+
+        resp = self._query_private('getorder', params)
+
+        if resp["msg"] == 'Success':
+            order = resp["order"]
+
+        return order
+
+    def orderlist(self):
+        """
+        @summary: Get a list of active orders.
+
+        @return: List of active orders.
+        """
+        resp = self._query_private('orderlist')
+
+        if resp["msg"] == 'Success':
+            orders = resp["orders"]
+
+        return orders
