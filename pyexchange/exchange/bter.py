@@ -228,7 +228,7 @@ class Bter(models.Exchange):
 
         return resp
 
-    def getfunds(self):
+    def get_balances(self):
         """
         @summary: Get information about funds.
 
@@ -278,7 +278,7 @@ class Bter(models.Exchange):
     def sell(self, rate, amount, pair=None):
         return self._placeorder('SELL', rate, amount, pair)
 
-    def cancelorder(self, order_id):
+    def cancel_order(self, order_id):
         """
         @summary: Cancel an order.
 
@@ -295,7 +295,7 @@ class Bter(models.Exchange):
 
         return resp
 
-    def getorder(self, order_id):
+    def get_order_status(self, order_id):
         """
         @summary: Get detailed info about specific order.
 
@@ -314,7 +314,7 @@ class Bter(models.Exchange):
 
         return order
 
-    def orderlist(self):
+    def list_orders(self):
         """
         @summary: Get a list of active orders.
 
