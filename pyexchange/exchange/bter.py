@@ -4,6 +4,8 @@
 from datetime import datetime
 import hashlib
 import hmac
+import time
+
 import models
 
 base_url = "https://bter.com/api/1"
@@ -87,7 +89,7 @@ class Bter(models.Exchange):
                     "trc_ltc": "trc_ltc",
                     "wdc_ltc": "wdc_ltc",
                     "yac_ltc": "yac_ltc",
-                    "myminer_btc": "myminer_btc"}
+                    }
 
     def __init__(self, market="ltc_btc", api_key=None, api_secret=None):
         """@todo: to be defined1
@@ -118,7 +120,7 @@ class Bter(models.Exchange):
 
         @return: Nonce
         """
-        return "%d" % (datetime.now().microsecond * 100)
+        return "%i" % (time.time() * 1E6)
 
     #####
     ## Public API functions
