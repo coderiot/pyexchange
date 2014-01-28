@@ -248,7 +248,7 @@ class Bter(models.Exchange):
 
         return [available_funds, locked_funds]
 
-    def placeorder(self, order_type, rate, amount, pair=None):
+    def _placeorder(self, order_type, rate, amount, pair=None):
         """
         @summary: Order placement.
 
@@ -271,6 +271,12 @@ class Bter(models.Exchange):
         resp = self._query_private('placeorder', params)
 
         return resp
+
+    def buy(self, rate, amount, pair=None):
+        return self._placeorder('BUY', rate, amount, pair)
+
+    def sell(self, rate, amount, pair=None):
+        return self._placeorder('SELL', rate, amount, pair)
 
     def cancelorder(self, order_id):
         """
