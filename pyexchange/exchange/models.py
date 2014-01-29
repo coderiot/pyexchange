@@ -2,10 +2,9 @@
 # encoding: utf-8
 
 from collections import namedtuple
-
 import decimal
-
 import sys
+import time
 
 import requests
 
@@ -86,6 +85,14 @@ class Exchange(object):
         """
 
         return requests.request(*args, **kwargs)
+
+    def _generate_nonce(self):
+        """
+        @summary: Generate Nonce for signature.
+
+        @return: Nonce
+        """
+        return "%i" % (time.time() * 1E6)
 
 
 TickerT = namedtuple("Ticker", ["avg",

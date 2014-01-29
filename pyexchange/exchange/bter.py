@@ -4,7 +4,6 @@
 from datetime import datetime
 import hashlib
 import hmac
-import time
 
 import models
 
@@ -113,14 +112,6 @@ class Bter(models.Exchange):
         """
         self.api_key = api_key
         self.api_secret = api_secret
-
-    def _generate_nonce(self):
-        """
-        @summary: Generate Nonce for signature.
-
-        @return: Nonce
-        """
-        return "%i" % (time.time() * 1E6)
 
     #####
     ## Public API functions
