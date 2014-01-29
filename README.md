@@ -26,6 +26,11 @@ $ pip install -e git+https://github.com/coderiot/pyexchange.git#egg=pyexchange
  - [Coins-e](https://www.coins-e.com/)
  - [Vircurex](https://www.vircurex.com/)
 
+## runnning tests
+```python
+python -m pyexchange.tests -v
+```
+
 ## Usage
 ### list supported exchanges
 ```python
