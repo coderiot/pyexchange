@@ -78,3 +78,89 @@ class Cryptotrade(models.Exchange):
 
         """
         return []
+
+
+    def _hmac_request(self, url, params=None):
+        return super(Cryptotrade, self)._hmac_request(url, params, key_name="AuthKey", sign_name="AuthSign")
+
+    def get_balances(self):
+        """
+        @summary: Get information about funds.
+
+        @return: Returns two dictionaries of available as well as locked funds.
+        """
+        url = "/".join([base_url, 'private', 'getinfo'])
+
+        resp = self._hmac_request(url)
+
+        if resp["status"] == 'success':
+            funds = resp["data"]["funds"]
+
+        return funds
+
+    def _trade(self, order_type, rate, amount):
+        """
+        @summary: Order placement.
+
+        @param order_type: Trading type ('Sell' or 'Buy')
+        @param rate: Buy or sell rate (f.e. '0.023')
+        @param amount: Buy or sell amount (f.e. '100')
+
+        @return: Server response.
+        """
+
+        params = {
+            'pair': self._symbol,
+            'type': str(order_type),
+            'rate': str(rate),
+            'amount': str(amount)
+        }
+
+        url = "/".join([base_url, 'private', 'trade'])
+        resp = self._hmac_request(url, params)
+
+        return resp
+
+    def buy(self, rate, amount):
+        return self._neworder('Buy', rate, amount)
+
+    def sell(self, rate, amount):
+        return self._neworder('Sell', rate, amount)
+
+    def cancel_order(self, order_id):
+        """
+        @summary: Cancel an order.
+
+        @param order_id: Order ID (f.e. '123456')
+
+        @return: Server response.
+
+        """
+        params = {
+            'orderid': str(order_id),
+        }
+
+        url = "/".join([base_url, 'private', 'cancelorder'])
+        resp = self._hmac_request(url, params)
+
+        return resp
+
+    def get_order_status(self, order_id):
+        """
+        @summary: Get detailed info about specific order.
+
+        @param order_id: Order ID (f.e. '123456')
+
+        @return: Order info.
+        """
+        params = {
+            'orderid': str(order_id),
+        }
+
+        url = "/".join([base_url, 'private', 'orderinfo'])
+        resp = self._hmac_request(url, params)
+
+        if resp["status"] == 'success':
+            order = resp["data"]
+
+        return order
