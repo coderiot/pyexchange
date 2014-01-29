@@ -96,7 +96,7 @@ class Exchange(object):
         """
         return "%i" % (time.time() * 1E6)
 
-    def _hmac_request(self, url, params=None, hash_fun=hashlib.sha512):
+    def _hmac_request(self, url, params=None, key_name="key", sign_name="sign", hash_fun=hashlib.sha512):
         """
         @summary: Performs query to private BTer API calls.
                   Request parameters are signed with API secret
@@ -105,6 +105,9 @@ class Exchange(object):
         @param method: API method to call (f.e. getfunds).
         @param params: Dictionary containing all parameters for the
                        API query.
+        @param key_name: Name for api key in header. Default: key
+        @param sign_name: Name for signed message in header. Default: sign
+        @param hash_fun: Hash function for signing request. Default: hashlib.sha512
 
         @return: Server response
         """
@@ -116,9 +119,10 @@ class Exchange(object):
         encoded_params = requests.models.RequestEncodingMixin()._encode_params(params)
         sign = hmac.new(self.api_secret, encoded_params, hash_fun)
 
+        # TODO: header names will change for different apis
         headers = {
-            'key': self.api_key,
-            'sign': sign.hexdigest()
+            key_name: self.api_key,
+            sign_name: sign.hexdigest()
         }
 
         resp = self._request('POST', url, data=params, headers=headers).json()
