@@ -678,24 +678,26 @@ class TestBter(unittest.TestCase):
         self.ex = pyexchange.bter.Bter()
 
     def test_markets(self):
-        exp_markets = ["btc_cny", "ltc_cny", "ftc_cny", "frc_cny",
-                       "ppc_cny", "trc_cny", "wdc_cny", "yac_cny",
-                       "cnc_cny", "bqc_cny", "ifc_cny", "zcc_cny",
-                       "cmc_cny", "jry_cny", "xpm_cny",
-                       "pts_cny", "tag_cny", "tix_cny", "src_cny",
-                       "mec_cny", "nmc_cny", "qrk_cny", "btb_cny",
-                       "exc_cny", "dtc_cny", "cent_cny", "red_cny",
-                       "zet_cny", "ftc_ltc", "frc_ltc", "ppc_ltc",
-                       "trc_ltc", "nmc_ltc", "wdc_ltc", "yac_ltc",
-                       "cnc_ltc", "bqc_ltc", "ifc_ltc", "red_ltc",
-                       "tix_ltc", "cent_ltc", "ltc_btc", "nmc_btc",
-                       "ppc_btc", "trc_btc", "frc_btc", "ftc_btc",
-                       "bqc_btc", "cnc_btc", "btb_btc", "yac_btc",
-                       "wdc_btc", "zcc_btc", "xpm_btc", "zet_btc",
-                       "src_btc", "sav_btc", "cdc_btc", "cmc_btc",
-                       "jry_btc", "tag_btc", "pts_btc", "dtc_btc",
-                       "exc_btc", "nec_btc", "mec_btc", "qrk_btc",
-                       "anc_btc", "nvc_btc", "buk_btc", "myminer_btc"]
+        exp_markets = ["btc_cny", "ltc_cny", "bqc_cny", "btb_cny",
+                       "btr_cny", "cent_cny", "cmc_cny", "cnc_cny",
+                       "dgc_cny", "doge_cny", "dtc_cny", "dvc_cny",
+                       "exc_cny", "ftc_cny", "frc_cny", "ifc_cny",
+                       "mec_cny", "mmc_cny", "net_cny", "nmc_cny",
+                       "nxt_cny", "ppc_cny", "pts_cny", "qrk_cny",
+                       "red_cny", "src_cny", "tag_cny", "tix_cny",
+                       "wdc_cny", "xpm_cny", "yac_cny", "zcc_cny",
+                       "zet_cny", "ltc_btc", "bqc_btc", "btb_btc",
+                       "buk_btc", "cdc_btc", "cmc_btc", "cnc_btc",
+                       "dgc_btc", "doge_btc", "dtc_btc", "exc_btc",
+                       "frc_btc", "ftc_btc", "mec_btc", "mmc_btc",
+                       "nec_btc", "nmc_btc", "nxt_btc", "ppc_btc",
+                       "pts_btc", "qrk_btc", "src_btc", "tag_btc",
+                       "yac_btc", "wdc_btc", "xpm_btc", "zcc_btc",
+                       "zet_btc", "bqc_ltc", "cent_ltc", "cnc_ltc",
+                       "dvc_ltc", "ftc_ltc", "frc_ltc", "ifc_ltc",
+                       "net_ltc", "nmc_ltc", "ppc_ltc", "red_ltc",
+                       "tix_ltc", "trc_ltc", "wdc_ltc", "yac_ltc",
+                        ]
 
         obj_markets = self.ex.markets()
         module_markets = pyexchange.bter.markets()
