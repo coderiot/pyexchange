@@ -5,7 +5,7 @@ from datetime import datetime
 
 import models
 
-base_url = "https://btcchina.com"
+base_url = "https://data.btcchina.com/data"
 
 
 class BtcChina(models.Exchange):
@@ -24,7 +24,7 @@ class BtcChina(models.Exchange):
         :returns: @todo
 
         """
-        url = "%s/%s" % (base_url, 'bc/orderbook')
+        url = "/".join([base_url, 'orderbook'])
         resp = self._request('GET', url).json()
 
         asks = []
@@ -43,7 +43,7 @@ class BtcChina(models.Exchange):
         :returns: @todo
 
         """
-        url = "%s/%s" % (base_url, 'bc/ticker')
+        url = "/".join([base_url, 'ticker'])
         resp = self._request('GET', url).json()
         resp = resp['ticker']
 
@@ -60,7 +60,7 @@ class BtcChina(models.Exchange):
         :returns: @todo
 
         """
-        url = "%s/%s" % (base_url, 'bc/trades')
+        url = "/".join([base_url, 'trades'])
         resp = self._request('GET', url).json()
 
         trades = []
