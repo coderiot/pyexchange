@@ -3,6 +3,8 @@
 
 from collections import namedtuple
 import decimal
+import hmac
+import hashlib
 import sys
 import time
 
@@ -93,6 +95,35 @@ class Exchange(object):
         @return: Nonce
         """
         return "%i" % (time.time() * 1E6)
+
+    def _hmac_request(self, url, params=None, hash_fun=hashlib.sha512):
+        """
+        @summary: Performs query to private BTer API calls.
+                  Request parameters are signed with API secret
+                  and headers are set up accordingly.
+
+        @param method: API method to call (f.e. getfunds).
+        @param params: Dictionary containing all parameters for the
+                       API query.
+
+        @return: Server response
+        """
+        if params is None:
+            params = {'nonce': self._generate_nonce()}
+        else:
+            params["nonce"] = self._generate_nonce()
+
+        encoded_params = requests.models.RequestEncodingMixin()._encode_params(params)
+        sign = hmac.new(self.api_secret, encoded_params, hash_fun)
+
+        headers = {
+            'key': self.api_key,
+            'sign': sign.hexdigest()
+        }
+
+        resp = self._request('POST', url, data=params, headers=headers).json()
+
+        return resp
 
 
 TickerT = namedtuple("Ticker", ["avg",

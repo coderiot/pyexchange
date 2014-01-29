@@ -186,38 +186,6 @@ class Bter(models.Exchange):
     #####
     ## Private API functions (API keys needed)
     ###
-    def _query_private(self, method, params=None):
-        """
-        @summary: Performs query to private BTer API calls.
-                  Request parameters are signed with API secret
-                  and headers are set up accordingly.
-
-        @param method: API method to call (f.e. getfunds).
-        @param params: Dictionary containing all parameters for the
-                       API query.
-
-        @return: Server response
-        """
-        url = "/".join([base_url, 'private', str(method)])
-
-        if params is None:
-            params = {
-                'nonce': self._generate_nonce()
-            }
-        else:
-            params["nonce"] = self._generate_nonce()
-
-        encoded_params = models.requests.models.RequestEncodingMixin()._encode_params(params)
-        sign = hmac.new(self.api_secret, encoded_params, hashlib.sha512)
-
-        headers = {
-            'key': self.api_key,
-            'sign': sign.hexdigest()
-        }
-
-        resp = self._request('POST', url, data=params, headers=headers).json()
-
-        return resp
 
     def get_balances(self):
         """
@@ -225,7 +193,8 @@ class Bter(models.Exchange):
 
         @return: Returns two dictionaries of available as well as locked funds.
         """
-        resp = self._query_private('getfunds')
+        url = "/".join([base_url, 'private', 'getfunds'])
+        resp = self._hmac_request(url)
 
         if "available_funds" in resp:
             available_funds = resp["available_funds"]
@@ -259,7 +228,8 @@ class Bter(models.Exchange):
             'rate': str(rate),
             'amount': str(amount)
         }
-        resp = self._query_private('placeorder', params)
+        url = "/".join([base_url, 'private', 'placeorder'])
+        resp = self._hmac_request(url, params)
 
         return resp
 
@@ -282,7 +252,8 @@ class Bter(models.Exchange):
             'order_id': str(order_id)
         }
 
-        resp = self._query_private('cancelorder', params)
+        url = "/".join([base_url, 'private', 'cancelorder'])
+        resp = self._hmac_request(url, params)
 
         return resp
 
@@ -298,7 +269,8 @@ class Bter(models.Exchange):
             'order_id': str(order_id)
         }
 
-        resp = self._query_private('getorder', params)
+        url = "/".join([base_url, 'private', 'getorder'])
+        resp = self._hmac_request(url, params)
 
         if resp["msg"] == 'Success':
             order = resp["order"]
@@ -311,7 +283,8 @@ class Bter(models.Exchange):
 
         @return: List of active orders.
         """
-        resp = self._query_private('orderlist')
+        url = "/".join([base_url, 'private', 'orderlist'])
+        resp = self._hmac_request(url)
 
         if resp["msg"] == 'Success':
             orders = resp["orders"]
