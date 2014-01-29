@@ -33,7 +33,9 @@ class TestExchangesList(unittest.TestCase):
                    'bitstamp',
                    'btcchina',
                    'btce',
+                   'bter',
                    'campbx',
+                   'coinse',
                    'cryptotrade',
                    'cryptsy',
                    'intersango',
@@ -41,7 +43,8 @@ class TestExchangesList(unittest.TestCase):
                    'localbitcoins',
                    'mtgox',
                    'rocktrading',
-                   'coinse']
+                   'vircurex'
+                   ]
 
         exs = pyexchange.exchanges()
         self.assertIsInstance(exs, list)
