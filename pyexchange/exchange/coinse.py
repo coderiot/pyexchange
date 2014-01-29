@@ -94,13 +94,15 @@ class Coinse(models.Exchange):
             "zet_btc": "ZET_BTC"
             }
 
-    def __init__(self, market="ltc_btc"):
+    def __init__(self, market="ltc_btc", api_key=None, api_secret=None):
         """@todo: to be defined1
 
         :currency: @todo
 
         """
         self.market = market
+        self.api_key = api_key
+        self.api_secret = api_secret
 
     def depth(self):
         """@todo: Docstring for depth
@@ -159,3 +161,89 @@ class Coinse(models.Exchange):
                                        tid=tid))
 
         return trades
+
+    def _neworder(self, order_type, rate, amount):
+        """
+        @summary: Order placement.
+
+        @param order_type: Trading type ('sell' or 'buy')
+        @param rate: Buy or sell rate (f.e. '0.023')
+        @param amount: Buy or sell amount (f.e. '100')
+
+        @return: Server response.
+        """
+
+        params = {
+            'method': 'neworder',
+            'order_type': str(order_type),
+            'rate': str(rate),
+            'quantity': str(amount)
+        }
+        url = "/".join([base_url, 'market', self._symbol])
+        resp = self._hmac_request(url, params)
+
+        return resp
+
+    def buy(self, rate, amount):
+        return self._neworder('buy', rate, amount)
+
+    def sell(self, rate, amount):
+        return self._neworder('sell', rate, amount)
+
+    def list_orders(self):
+        """
+        @summary: Get a list of active orders.
+
+        @return: List of active orders.
+        """
+        url = "/".join([base_url, 'market', self._symbol])
+        params = {'method': 'listorders'}
+        resp = self._hmac_request(url, params)
+
+        if resp["message"] == 'success':
+            orders = resp["orders"]
+
+        return orders
+
+    def cancel_order(self, order_id):
+        """
+        @summary: Cancel an order.
+
+        @param order_id: Order ID (f.e. '123456')
+
+        @return: Server response.
+
+        """
+        params = {
+            'order_id': str(order_id),
+            'method': 'cancelorder'
+        }
+
+        url = "/".join([base_url, 'market', self._symbol])
+        resp = self._hmac_request(url, params)
+
+        if resp["message"] == 'success':
+            order = resp["order"]
+
+        return order
+
+    def get_order_status(self, order_id):
+        """
+        @summary: Get detailed info about specific order.
+
+        @param order_id: Order ID (f.e. '123456')
+
+        @return: Order info.
+        """
+        params = {
+            'order_id': str(order_id),
+            'method': 'getorder'
+        }
+
+        url = "/".join([base_url, 'market', self._symbol])
+        resp = self._hmac_request(url, params)
+
+        if resp["message"] == 'success':
+            order = resp["order"]
+
+        return order
