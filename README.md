@@ -17,15 +17,15 @@ $ pip install -e git+https://github.com/coderiot/pyexchange.git#egg=pyexchange
 | [BTCChina](https://btcchina.com/)                    | Yes  | No  |
 | [BTC-e](https://btc-e.com/)                          | Yes  | No  |
 | [CampBX](https://campbx.com/)                        | Yes  | No  |
-| [Crypto-Trade](https://crypto-trade.com/)            | Yes  | No  |
-| [Cryptsy](https://crypto-trade.com/)                 | Yes  | No  |
+| [Crypto-Trade](https://crypto-trade.com/)            | Yes  | Yes (not tested)|
+| [Cryptsy](https://crypto-trade.com/)                 | Yes  | Yes (not tested)  |
 | [Intersango](https://intersango.com/)                | Yes  | No  |
 | [Justcoin](https://justcoin.com/)                    | Yes  | No  |
 | [localbitcions](https://localbitcoins.com/)          | Yes  | No  |
 | [mtgox](https://www.mtgox.com/)                      | Yes  | No  |
 | [The Rock Trading](https://www.therocktrading.com/)  | Yes  | No  |
 | [Bter](https://www.bter.com/)                        | Yes  | Yes (without tests)  |
-| [Coins-e](https://www.coins-e.com/)                  | Yes  | No  |
+| [Coins-e](https://www.coins-e.com/)                  | Yes  | Yes (not tested)|
 | [Vircurex](https://www.vircurex.com/)                | Yes  | No  |
 
 ## runnning tests
