@@ -9,22 +9,24 @@
 $ pip install -e git+https://github.com/coderiot/pyexchange.git#egg=pyexchange
 ```
 ## Supported exchanges
- - [Bitcurex](https://bitcurex.com/)
- - [Bitfinex](https://www.bitfinex.com/)
- - [Bitstamp](https://www.bitstamp.net/)
- - [BTCChina](https://btcchina.com/)
- - [BTC-e](https://btc-e.com/)
- - [CampBX](https://campbx.com/)
- - [Crypto-Trade](https://crypto-trade.com/)
- - [Cryptsy](https://crypto-trade.com/)
- - [Intersango](https://intersango.com/)
- - [Justcoin](https://justcoin.com/)
- - [localbitcions](https://localbitcoins.com/)
- - [mtgox](https://www.mtgox.com/)
- - [The Rock Trading](https://www.therocktrading.com/)
- - [Bter](https://www.bter.com/)
- - [Coins-e](https://www.coins-e.com/)
- - [Vircurex](https://www.vircurex.com/)
+| Exchange Name | Public Api    | Private Api   |
+| ------------- | ------------- | ------------- |
+| [Bitcurex](https://bitcurex.com/)                    | Yes  | No  |
+| [Bitfinex](https://www.bitfinex.com/)                | Yes  | No  |
+| [Bitstamp](https://www.bitstamp.net/)                | Yes  | No  |
+| [BTCChina](https://btcchina.com/)                    | Yes  | No  |
+| [BTC-e](https://btc-e.com/)                          | Yes  | No  |
+| [CampBX](https://campbx.com/)                        | Yes  | No  |
+| [Crypto-Trade](https://crypto-trade.com/)            | Yes  | No  |
+| [Cryptsy](https://crypto-trade.com/)                 | Yes  | No  |
+| [Intersango](https://intersango.com/)                | Yes  | No  |
+| [Justcoin](https://justcoin.com/)                    | Yes  | No  |
+| [localbitcions](https://localbitcoins.com/)          | Yes  | No  |
+| [mtgox](https://www.mtgox.com/)                      | Yes  | No  |
+| [The Rock Trading](https://www.therocktrading.com/)  | Yes  | No  |
+| [Bter](https://www.bter.com/)                        | Yes  | Yes (without tests)  |
+| [Coins-e](https://www.coins-e.com/)                  | Yes  | No  |
+| [Vircurex](https://www.vircurex.com/)                | Yes  | No  |
 
 ## runnning tests
 ```python
