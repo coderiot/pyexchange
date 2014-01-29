@@ -6,7 +6,7 @@ from datetime import datetime
 import models
 
 public_url = "http://pubapi.cryptsy.com/api.php"
-
+private_url = "https://www.cryptsy.com/api"
 
 class Cryptsy(models.Exchange):
     """Docstring for Cryptsy"""
@@ -94,13 +94,15 @@ class Cryptsy(models.Exchange):
                     'dvc_ltc': 52,
                    }
 
-    def __init__(self, market="ltc_btc"):
+    def __init__(self, market="ltc_btc", api_key=None, api_secret=None):
         """@todo: to be defined1
 
         :currency: @todo
 
         """
         self.market = market
+        self.api_key = api_key
+        self.api_secret = api_secret
 
     def depth(self):
         """@todo: Docstring for depth
@@ -165,3 +167,78 @@ class Cryptsy(models.Exchange):
                                        tid=tid))
 
         return trades
+
+    def _hmac_request(self, url, params=None):
+        return super(Cryptsy, self)._hmac_request(url, params, key_name="Key", sign_name="Sign")
+
+    def cancel_order(self, order_id):
+        """
+        @summary: Cancel an order.
+
+        @param order_id: Order ID (f.e. '123456')
+
+        @return: Server response.
+
+        """
+        params = {
+            'orderid': str(order_id),
+            'method': 'cancelorder'
+        }
+
+        resp = self._hmac_request(private_url, params)
+
+        return resp
+
+    def list_orders(self):
+        """
+        @summary: Get a list of active orders.
+
+        @return: List of active orders.
+        """
+        params = {'method': 'myorders',
+                  'marketid': self._symbol}
+        resp = self._hmac_request(private_url, params)
+
+        return resp
+
+    def _createorder(self, order_type, rate, amount):
+        """
+        @summary: Order placement.
+
+        @param order_type: Trading type ('Sell' or 'Buy')
+        @param rate: Buy or sell rate (f.e. '0.023')
+        @param amount: Buy or sell amount (f.e. '100')
+
+        @return: Server response.
+        """
+
+        params = {
+            'method': 'createorder',
+            'marketid': self._symbol,
+            'ordertype': str(order_type),
+            'price': str(rate),
+            'quantity': str(amount)
+        }
+        resp = self._hmac_request(private_url, params)
+
+        return resp
+
+    def buy(self, rate, amount):
+        return self._neworder('Buy', rate, amount)
+
+    def sell(self, rate, amount):
+        return self._neworder('Sell', rate, amount)
+
+    def get_balances(self):
+        """
+        @summary: Get information about funds.
+
+        @return: Returns two dictionaries of available as well as locked funds.
+        """
+        params = {
+            'method': 'getinfo'
+        }
+
+        resp = self._hmac_request(private_url, params)
+
+        return resp
