@@ -35,6 +35,7 @@ class TestExchangesList(unittest.TestCase):
                    'btce',
                    'bter',
                    'campbx',
+                   'coinex',
                    'coinse',
                    'cryptotrade',
                    'cryptsy',
@@ -56,7 +57,6 @@ class TestExchangesList(unittest.TestCase):
             self.assertIsInstance(ex_obj, models.Exchange)
 
     def test_unknow_exchange(self):
-        #ex = pyexchange.new_exchange('unknown')
         self.assertRaises(Exception, pyexchange.new_exchange, 'unknown')
 
 
@@ -895,5 +895,61 @@ class TestVircurex(unittest.TestCase):
             self.assertIsInstance(t.amount, decimal.Decimal)
             self.assertIsInstance(t.tid, int)
 
+
+class TestCoinex(unittest.TestCase):
+    """Test case docstring"""
+
+    def setUp(self):
+        self.ex = pyexchange.coinex.Coinex()
+
+    def test_markets(self):
+        exp_markets = ["ifc_ltc", "boc_btc", "pyc_btc", "grw_btc",
+                       "cat_doge", "xpm_btc", "phs_btc", "mnc_btc",
+                       "ifc_btc", "wdc_doge", "src_btc", "ifc_doge",
+                       "boc_ltc", "gld_ltc", "fre_btc", "lot_btc",
+                       "uno_doge", "nvc_btc", "cmc_btc", "zet_doge",
+                       "cgb_btc", "exc_btc", "wdc_btc", "bet_btc",
+                       "zet_btc", "ftc_btc", "asc_btc", "eac_btc",
+                       "asc_doge", "mec_btc", "ffc_doge", "moon_doge",
+                       "eac_doge", "sxc_ltc", "osc_btc", "sxc_doge",
+                       "ppc_btc", "bfc_btc", "tek_btc", "dem_btc",
+                       "moon_btc", "anc_btc", "fst_btc", "doge_btc",
+                       "sxc_btc", "tgc_ltc", "cat_ltc", "tgc_btc",
+                       "moon_ltc", "gld_btc", "cap_btc", "lot_doge",
+                       "lky_btc", "nec_btc", "pxc_btc", "trc_btc",
+                       "bte_btc", "hbn_btc", "bet_ltc", "ltc_btc",
+                       "lot_ltc", "dgc_btc", "uno_btc", "ffc_btc",
+                       "doge_ltc", "eac_ltc", "ffc_ltc", "xjo_btc",
+                       "asc_ltc", "cat_btc"]
+
+        obj_markets = self.ex.markets()
+        module_markets = pyexchange.coinex.markets()
+        self.assertItemsEqual(exp_markets, obj_markets)
+        self.assertItemsEqual(exp_markets, module_markets)
+
+    def test_depth(self):
+        asks, bids = self.ex.depth()
+        self.assertIsInstance(asks, list)
+        self.assertIsInstance(bids, list)
+        for a in asks:
+            self.assertIsInstance(a, models.Order)
+            self.assertIsInstance(a.price, decimal.Decimal)
+            self.assertIsInstance(a.amount, decimal.Decimal)
+
+        for b in bids:
+            self.assertIsInstance(b, models.Order)
+            self.assertIsInstance(b.price, decimal.Decimal)
+            self.assertIsInstance(b.amount, decimal.Decimal)
+
+    def test_trades(self):
+        trades = self.ex.trades()
+        self.assertIsInstance(trades, list)
+        for t in trades:
+            self.assertIsInstance(t, models.Trade)
+            self.assertIsInstance(t.date, datetime.datetime)
+            self.assertIsInstance(t.price, decimal.Decimal)
+            self.assertIsInstance(t.amount, decimal.Decimal)
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)
+

@@ -27,6 +27,7 @@ $ pip install -e git+https://github.com/coderiot/pyexchange.git#egg=pyexchange
 | [Bter](https://www.bter.com/)                        | Yes  | Yes (without tests)  |
 | [Coins-e](https://www.coins-e.com/)                  | Yes  | Yes (not tested)|
 | [Vircurex](https://www.vircurex.com/)                | Yes  | No  |
+| [CoinEx](https://www.coinex.pw/)                     | Yes  | No  |
 
 ## runnning tests
 ```python
