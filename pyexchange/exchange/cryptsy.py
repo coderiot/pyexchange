@@ -3,7 +3,7 @@
 
 from datetime import datetime
 
-import models
+from pyexchange.exchange import models
 
 public_url = "http://pubapi.cryptsy.com/api.php"
 private_url = "https://www.cryptsy.com/api"

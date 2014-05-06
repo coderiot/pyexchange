@@ -3,12 +3,12 @@
 
 from datetime import datetime
 
-import models
+from pyexchange.exchange import models
 
 base_url = "https://btc-e.com/api/2"
 
 class Btce(models.Exchange):
-    """Docstring for Bitstamp """
+    """Docstring for Btce """
     _markets_map = {'btc_usd': 'btc_usd',
                     'btc_eur': 'btc_eur',
                     'btc_rur': 'btc_rur',

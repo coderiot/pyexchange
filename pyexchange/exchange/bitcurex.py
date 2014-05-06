@@ -3,7 +3,7 @@
 
 from datetime import datetime
 
-import models
+from pyexchange.exchange import models
 
 data_url = "https://%(market)s.bitcurex.com/data/%(method)s"
 

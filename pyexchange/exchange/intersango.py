@@ -3,7 +3,7 @@
 
 from datetime import datetime
 
-import models
+from pyexchange.exchange import models
 
 base_url = "https://intersango.com/api"
 

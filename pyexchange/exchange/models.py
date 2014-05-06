@@ -20,6 +20,7 @@ class ExchangeMeta(type):
 
     def __init__(cls, name, bases, dct):
         if not hasattr(cls, '_register'):
+            # called by Exchange super class
             cls._register = {}
         else:
             cls._register[name.lower()] = cls
@@ -30,10 +31,8 @@ class ExchangeMeta(type):
         current_module.markets = lambda: cls._markets_map.keys()
         super(ExchangeMeta, cls).__init__(name, bases, dct)
 
-
 class Exchange(object):
     """Exchange Interface"""
-    __metaclass__ = ExchangeMeta
     decimal.setcontext(decimal.ExtendedContext)
 
     def __repr__(self):
@@ -129,6 +128,8 @@ class Exchange(object):
 
         return resp
 
+# wrapping Exchange class for python2 and 3 compatibility
+Exchange = ExchangeMeta('Exchange', (Exchange, ), {})
 
 TickerT = namedtuple("Ticker", ["avg",
                                "high",

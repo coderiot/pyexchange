@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
-import exchange.models
+from pyexchange.exchange import models
 
-from exchange import *
+from pyexchange.exchange import *
 
 
 def exchanges():
@@ -25,7 +25,7 @@ def exchanges():
      'bitcurex']
 
     """
-    return sorted([name for name in exchange.models.Exchange._register])
+    return sorted([name for name in models.Exchange._register])
 
 
 def new_exchange(name, market=None):
@@ -36,12 +36,12 @@ def new_exchange(name, market=None):
     :returns: exchange object
 
     """
-    if name.lower() not in exchange.models.Exchange._register:
+    if name.lower() not in models.Exchange._register:
         raise Exception("Unknown Exchange name. \
                         Use pyexchange.exchanges for \
                         a list of all available Exchanges.")
 
-    cls = exchange.models.Exchange._register[name.lower()]
+    cls = models.Exchange._register[name.lower()]
 
     if market:
         obj = cls(market)
@@ -60,12 +60,12 @@ def markets(name):
               ['btc_eur', 'btc_pln']
 
     """
-    if name.lower() not in exchange.models.Exchange._register:
+    if name.lower() not in models.Exchange._register:
         raise Exception("Unknown Exchange name. \
                         Use pyexchange.exchanges for \
                         a list of all available Exchanges.")
 
-    cls = exchange.models.Exchange._register[name.lower()]
+    cls = models.Exchange._register[name.lower()]
 
     return cls().markets()
 
@@ -81,7 +81,7 @@ def find_market(market):
 
     """
     markets = []
-    for name, cls in exchange.models.Exchange._register.items():
+    for name, cls in models.Exchange._register.items():
         if market in cls._markets_map:
             markets.append((name, market))
 

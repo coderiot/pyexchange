@@ -5,7 +5,7 @@ from datetime import datetime
 import hashlib
 import hmac
 
-import models
+from pyexchange.exchange import models
 
 base_url = "https://bter.com/api/1"
 

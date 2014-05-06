@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
-import models
+from pyexchange.exchange import models
 
 base_url = "https://crypto-trade.com/api/1"
 
