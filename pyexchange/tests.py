@@ -39,10 +39,8 @@ class TestExchangesList(unittest.TestCase):
                    'coinse',
                    'cryptotrade',
                    'cryptsy',
-                   'intersango',
                    'justcoin',
                    'localbitcoins',
-                   'mtgox',
                    'rocktrading',
                    'vircurex'
                    ]

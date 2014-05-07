@@ -1,4 +1,4 @@
-__all__ = ['mtgox',
+__all__ = [
            'btce',
            'btcchina',
            'bitcurex',
@@ -8,7 +8,6 @@ __all__ = ['mtgox',
            'coinex',
            'cryptsy',
            'cryptotrade',
-           'intersango',
            'localbitcoins',
            'rocktrading',
            'justcoin',
