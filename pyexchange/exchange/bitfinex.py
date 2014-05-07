@@ -30,7 +30,7 @@ class Bitfinex(models.Exchange):
         """
         url = "/".join([base_url, 'book', self._symbol])
 
-        resp = self._request('GET', url, verify=False).json()
+        resp = self._request('GET', url).json()
 
         asks = []
         for o in resp['asks']:
@@ -50,7 +50,7 @@ class Bitfinex(models.Exchange):
         """
         url = "/".join([base_url, 'ticker', self._symbol])
 
-        resp = self._request('GET', url, verify=False).json()
+        resp = self._request('GET', url).json()
 
         return models.Ticker(avg=self._create_decimal(resp['mid']),
                              buy=self._create_decimal(resp['bid']),
@@ -65,7 +65,7 @@ class Bitfinex(models.Exchange):
         """
         url = "/".join([base_url, 'trades', self._symbol])
 
-        resp = self._request('GET', url, verify=False).json()
+        resp = self._request('GET', url).json()
         trades = []
         for t in resp:
             date = datetime.fromtimestamp(t['timestamp'])

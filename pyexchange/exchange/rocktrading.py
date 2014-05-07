@@ -33,7 +33,7 @@ class RockTrading(models.Exchange):
 
         """
         url = "%s/%s/%s" % (base_url, 'orderbook', self._symbol)
-        resp = self._request('GET', url, verify=False).json()
+        resp = self._request('GET', url).json()
 
         asks = []
         for p, a in resp['asks']:
@@ -52,7 +52,7 @@ class RockTrading(models.Exchange):
 
         """
         url = "%s/%s/%s" % (base_url, 'ticker', self._symbol)
-        resp = self._request('GET', url, verify=False).json()
+        resp = self._request('GET', url).json()
         resp = resp['result'][0]
 
         return models.Ticker(
@@ -66,7 +66,7 @@ class RockTrading(models.Exchange):
 
         """
         url = "%s/%s/%s" % (base_url, 'trades', self._symbol)
-        resp = self._request('GET', url, verify=False).json()
+        resp = self._request('GET', url).json()
 
         trades = []
         for t in resp:
