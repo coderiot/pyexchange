@@ -5,6 +5,8 @@ import datetime
 
 import decimal
 
+import sys
+
 import unittest
 
 import pyexchange
@@ -68,8 +70,8 @@ class TestBitcurex(unittest.TestCase):
         exp_markets = ['btc_eur', 'btc_pln']
         obj_markets = self.ex.markets()
         module_markets = pyexchange.bitcurex.markets()
-        self.assertItemsEqual(exp_markets, obj_markets)
-        self.assertItemsEqual(exp_markets, module_markets)
+        self.assertEqual(sorted(exp_markets), sorted(obj_markets))
+        self.assertEqual(sorted(exp_markets), sorted(module_markets))
 
     def test_ticker(self):
         ticker = self.ex.ticker()
@@ -112,8 +114,8 @@ class TestBitfinex(unittest.TestCase):
         exp_markets = ['ltc_btc', 'ltc_usd', 'btc_usd']
         obj_markets = self.ex.markets()
         module_markets = pyexchange.bitfinex.markets()
-        self.assertItemsEqual(exp_markets, obj_markets)
-        self.assertItemsEqual(exp_markets, module_markets)
+        self.assertEqual(sorted(exp_markets), sorted(obj_markets))
+        self.assertEqual(sorted(exp_markets), sorted(module_markets))
 
     def test_ticker(self):
         ticker = self.ex.ticker()
@@ -156,8 +158,8 @@ class TestBitstamp(unittest.TestCase):
         exp_markets = ['btc_usd']
         obj_markets = self.ex.markets()
         module_markets = pyexchange.bitstamp.markets()
-        self.assertItemsEqual(exp_markets, obj_markets)
-        self.assertItemsEqual(exp_markets, module_markets)
+        self.assertEqual(sorted(exp_markets), sorted(obj_markets))
+        self.assertEqual(sorted(exp_markets), sorted(module_markets))
 
     def test_ticker(self):
         ticker = self.ex.ticker()
@@ -200,8 +202,8 @@ class TestBtcchina(unittest.TestCase):
         exp_markets = ['btc_cny']
         obj_markets = self.ex.markets()
         module_markets = pyexchange.btcchina.markets()
-        self.assertItemsEqual(exp_markets, obj_markets)
-        self.assertItemsEqual(exp_markets, module_markets)
+        self.assertEqual(sorted(exp_markets), sorted(obj_markets))
+        self.assertEqual(sorted(exp_markets), sorted(module_markets))
 
     def test_ticker(self):
         ticker = self.ex.ticker()
@@ -249,8 +251,8 @@ class TestBtce(unittest.TestCase):
                        'ftc_btc']
         obj_markets = self.ex.markets()
         module_markets = pyexchange.btce.markets()
-        self.assertItemsEqual(exp_markets, obj_markets)
-        self.assertItemsEqual(exp_markets, module_markets)
+        self.assertEqual(sorted(exp_markets), sorted(obj_markets))
+        self.assertEqual(sorted(exp_markets), sorted(module_markets))
 
     def test_ticker(self):
         ticker = self.ex.ticker()
@@ -293,8 +295,8 @@ class TestCampbx(unittest.TestCase):
         exp_markets = ['btc_usd']
         obj_markets = self.ex.markets()
         module_markets = pyexchange.campbx.markets()
-        self.assertItemsEqual(exp_markets, obj_markets)
-        self.assertItemsEqual(exp_markets, module_markets)
+        self.assertEqual(sorted(exp_markets), sorted(obj_markets))
+        self.assertEqual(sorted(exp_markets), sorted(module_markets))
 
     def test_ticker(self):
         ticker = self.ex.ticker()
@@ -319,7 +321,7 @@ class TestCampbx(unittest.TestCase):
     def test_trades(self):
         trades = self.ex.trades()
         self.assertIsInstance(trades, list)
-        self.assertItemsEqual(trades, [])
+        self.assertEqual(trades, [])
 
 
 class TestCryptotrade(unittest.TestCase):
@@ -338,8 +340,8 @@ class TestCryptotrade(unittest.TestCase):
                        'wdc_usd']
         obj_markets = self.ex.markets()
         module_markets = pyexchange.cryptotrade.markets()
-        self.assertItemsEqual(exp_markets, obj_markets)
-        self.assertItemsEqual(exp_markets, module_markets)
+        self.assertEqual(sorted(exp_markets), sorted(obj_markets))
+        self.assertEqual(sorted(exp_markets), sorted(module_markets))
 
     def test_ticker(self):
         ticker = self.ex.ticker()
@@ -407,8 +409,8 @@ class TestCryptsy(unittest.TestCase):
                        'emd_btc', 'buk_btc', 'dvc_ltc']
         obj_markets = self.ex.markets()
         module_markets = pyexchange.cryptsy.markets()
-        self.assertItemsEqual(exp_markets, obj_markets)
-        self.assertItemsEqual(exp_markets, module_markets)
+        self.assertEqual(sorted(exp_markets), sorted(obj_markets))
+        self.assertEqual(sorted(exp_markets), sorted(module_markets))
 
     def test_ticker(self):
         ticker = self.ex.ticker()
@@ -452,8 +454,8 @@ class TestIntersango(unittest.TestCase):
 
         obj_markets = self.ex.markets()
         module_markets = pyexchange.intersango.markets()
-        self.assertItemsEqual(exp_markets, obj_markets)
-        self.assertItemsEqual(exp_markets, module_markets)
+        self.assertEqual(sorted(exp_markets), sorted(obj_markets))
+        self.assertEqual(sorted(exp_markets), sorted(module_markets))
 
     def test_ticker(self):
         ticker = self.ex.ticker()
@@ -496,8 +498,8 @@ class TestJustcoin(unittest.TestCase):
 
         obj_markets = self.ex.markets()
         module_markets = pyexchange.justcoin.markets()
-        self.assertItemsEqual(exp_markets, obj_markets)
-        self.assertItemsEqual(exp_markets, module_markets)
+        self.assertEqual(sorted(exp_markets), sorted(obj_markets))
+        self.assertEqual(sorted(exp_markets), sorted(module_markets))
 
     def test_ticker(self):
         ticker = self.ex.ticker()
@@ -544,8 +546,8 @@ class TestLocalbitcoins(unittest.TestCase):
                        'btc_usd', 'btc_zar']
         obj_markets = self.ex.markets()
         module_markets = pyexchange.localbitcoins.markets()
-        self.assertItemsEqual(exp_markets, obj_markets)
-        self.assertItemsEqual(exp_markets, module_markets)
+        self.assertEqual(sorted(exp_markets), sorted(obj_markets))
+        self.assertEqual(sorted(exp_markets), sorted(module_markets))
 
     def test_ticker(self):
         ticker = self.ex.ticker()
@@ -593,8 +595,8 @@ class TestMtGox(unittest.TestCase):
                        'btc_nok', 'btc_czk']
         obj_markets = self.ex.markets()
         module_markets = pyexchange.mtgox.markets()
-        self.assertItemsEqual(exp_markets, obj_markets)
-        self.assertItemsEqual(exp_markets, module_markets)
+        self.assertEqual(sorted(exp_markets), sorted(obj_markets))
+        self.assertEqual(sorted(exp_markets), sorted(module_markets))
 
     def test_ticker(self):
         ticker = self.ex.ticker()
@@ -638,8 +640,9 @@ class TestRocktrading(unittest.TestCase):
 
         obj_markets = self.ex.markets()
         module_markets = pyexchange.rocktrading.markets()
-        self.assertItemsEqual(exp_markets, obj_markets)
-        self.assertItemsEqual(exp_markets, module_markets)
+
+        self.assertEqual(sorted(exp_markets), sorted(obj_markets))
+        self.assertEqual(sorted(exp_markets), sorted(module_markets))
 
     def test_ticker(self):
         ticker = self.ex.ticker()
@@ -701,8 +704,8 @@ class TestBter(unittest.TestCase):
 
         obj_markets = self.ex.markets()
         module_markets = pyexchange.bter.markets()
-        self.assertItemsEqual(exp_markets, obj_markets)
-        self.assertItemsEqual(exp_markets, module_markets)
+        self.assertEqual(sorted(exp_markets), sorted(obj_markets))
+        self.assertEqual(sorted(exp_markets), sorted(module_markets))
 
     def test_ticker(self):
         ticker = self.ex.ticker()
@@ -765,8 +768,8 @@ class TestCoinse(unittest.TestCase):
 
         obj_markets = self.ex.markets()
         module_markets = pyexchange.coinse.markets()
-        self.assertItemsEqual(exp_markets, obj_markets)
-        self.assertItemsEqual(exp_markets, module_markets)
+        self.assertEqual(sorted(exp_markets), sorted(obj_markets))
+        self.assertEqual(sorted(exp_markets), sorted(module_markets))
 
     def test_ticker(self):
         ticker = self.ex.ticker()
@@ -862,8 +865,8 @@ class TestVircurex(unittest.TestCase):
 
         obj_markets = self.ex.markets()
         module_markets = pyexchange.vircurex.markets()
-        self.assertItemsEqual(exp_markets, obj_markets)
-        self.assertItemsEqual(exp_markets, module_markets)
+        self.assertEqual(sorted(exp_markets), sorted(obj_markets))
+        self.assertEqual(sorted(exp_markets), sorted(module_markets))
 
     def test_ticker(self):
         ticker = self.ex.ticker()
@@ -924,8 +927,8 @@ class TestCoinex(unittest.TestCase):
 
         obj_markets = self.ex.markets()
         module_markets = pyexchange.coinex.markets()
-        self.assertItemsEqual(exp_markets, obj_markets)
-        self.assertItemsEqual(exp_markets, module_markets)
+        self.assertEqual(sorted(exp_markets), sorted(obj_markets))
+        self.assertEqual(sorted(exp_markets), sorted(module_markets))
 
     def test_depth(self):
         asks, bids = self.ex.depth()
