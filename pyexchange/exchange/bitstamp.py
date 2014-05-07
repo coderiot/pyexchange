@@ -5,7 +5,7 @@ from datetime import datetime
 
 from pyexchange.exchange import models
 
-base_url = "https://www.bitstamp.net/api/"
+base_url = "https://www.bitstamp.net/api"
 
 
 class Bitstamp(models.Exchange):
@@ -25,7 +25,7 @@ class Bitstamp(models.Exchange):
         :returns: @todo
 
         """
-        url = "/".join([base_url, 'order_book'])
+        url = "/".join([base_url, 'order_book/'])
         resp = self._request('GET', url).json()
 
         asks = []
@@ -44,7 +44,7 @@ class Bitstamp(models.Exchange):
         :returns: @todo
 
         """
-        url = "/".join([base_url, 'ticker'])
+        url = "/".join([base_url, 'ticker/'])
         resp = self._request('GET', url).json()
 
         return models.Ticker(
@@ -60,7 +60,7 @@ class Bitstamp(models.Exchange):
         :returns: @todo
 
         """
-        url = "/".join([base_url, 'transactions'])
+        url = "/".join([base_url, 'transactions/'])
         resp = self._request('GET', url).json()
 
         trades = []
