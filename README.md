@@ -19,10 +19,10 @@ $ pip install -e git+https://github.com/coderiot/pyexchange.git#egg=pyexchange
 | [CampBX](https://campbx.com/)                        | Yes  | No  |
 | [Crypto-Trade](https://crypto-trade.com/)            | Yes  | Yes (not tested)|
 | [Cryptsy](https://crypto-trade.com/)                 | Yes  | Yes (not tested)  |
-| [Intersango](https://intersango.com/)                | Yes  | No  |
+| ~~[Intersango](https://intersango.com/)~~ (removed)               | Yes  | No  |
 | [Justcoin](https://justcoin.com/)                    | Yes  | No  |
 | [localbitcions](https://localbitcoins.com/)          | Yes  | No  |
-| [mtgox](https://www.mtgox.com/)                      | Yes  | No  |
+| ~~[mtgox](https://www.mtgox.com/)~~ (removed)                      | Yes  | No  |
 | [The Rock Trading](https://www.therocktrading.com/)  | Yes  | No  |
 | [Bter](https://www.bter.com/)                        | Yes  | Yes (without tests)  |
 | [Coins-e](https://www.coins-e.com/)                  | Yes  | Yes (not tested)|
@@ -30,6 +30,8 @@ $ pip install -e git+https://github.com/coderiot/pyexchange.git#egg=pyexchange
 | [CoinEx](https://www.coinex.pw/)                     | Yes  | No  |
 
 ## runnning tests
+tested with python2.7 and python3
+
 ```python
 python -m pyexchange.tests -v
 ```
