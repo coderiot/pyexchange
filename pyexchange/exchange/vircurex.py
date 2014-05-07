@@ -5,7 +5,7 @@ from datetime import datetime
 
 from pyexchange.exchange import models
 
-base_url = "https://vircurex.com/api/"
+base_url = "https://api.vircurex.com/api/"
 
 
 class Vircurex(models.Exchange):
