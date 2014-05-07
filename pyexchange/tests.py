@@ -442,6 +442,7 @@ class TestCryptsy(unittest.TestCase):
             self.assertIsInstance(t.amount, decimal.Decimal)
 
 
+@unittest.skip("skipping intersango")
 class TestIntersango(unittest.TestCase):
     """Test case docstring"""
 
@@ -578,6 +579,7 @@ class TestLocalbitcoins(unittest.TestCase):
             self.assertIsInstance(t.amount, decimal.Decimal)
 
 
+@unittest.skip("skipping mtgox")
 class TestMtGox(unittest.TestCase):
     """Test case docstring"""
 
