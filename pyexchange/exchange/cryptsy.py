@@ -136,7 +136,7 @@ class Cryptsy(models.Exchange):
                                             'singlemarketdata',
                                             self._symbol)
         resp = self._request('GET', url).json()
-        key = resp['return']['markets'].keys()[0]
+        key = list(resp['return']['markets'].keys())[0]
         resp = resp['return']['markets'][key]
 
         return models.Ticker(
@@ -152,7 +152,7 @@ class Cryptsy(models.Exchange):
                                             'singlemarketdata',
                                             self._symbol)
         resp = self._request('GET', url).json()
-        key = resp['return']['markets'].keys()[0]
+        key = list(resp['return']['markets'].keys())[0]
         resp = resp['return']['markets'][key]
 
         trades = []
